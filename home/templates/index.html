@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+{% load django_bootstrap5 %}
+<html lang="pt-br" data-bs-theme="light">
+
+{% block head %}
+    {% include "head.html" %}
+{% endblock %}
+
+<body class="d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark shadow">
+        <div class="container">
+            <a class="navbar-brand text-gold fw-bold fs-4" href="/">
+                <i class="fas fa-key"></i> HOTKEY
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-bold" href="#" id="menuCadastros" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-edit text-gold"></i> Cadastros
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'clientes' %}"><i class="fas fa-users"></i> Clientes</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-building"></i> Blocos</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-door-open"></i> Salas</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-key"></i> Chaves</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-id-badge"></i> Funcionários</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-bold" href="#" id="menuOperacoes" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-cogs text-gold"></i> Operações
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-check"></i> Reservas</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-hand-holding"></i> Empréstimos</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section">
+        {% if messages %}
+        <div class="container mt-3">
+            {% bootstrap_messages %}
+        </div>
+        {% endif %}
+    </section>
+
+    <main class="flex-grow-1">
+        {% block content %}
+        <div class="container mt-5 text-center">
+            <h1 class="display-4 text-dark mt-5">Bem-vindo ao sistema <span class="text-gold fw-bold">HOTKEY</span></h1>
+            <p class="lead mt-3">Gerenciamento inteligente de chaves e acessos.</p>
+            <i class="fas fa-key fa-5x text-gold mt-4 opacity-50"></i>
+        </div>
+        {% endblock %}
+    </main>
+
+    {% block footer %}
+        {% include "footer.html" %}
+    {% endblock %}
+
+</body>
+</html>

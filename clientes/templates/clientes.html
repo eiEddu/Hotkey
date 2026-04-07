@@ -1,0 +1,72 @@
+{% extends 'index.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<section class="section mt-4">
+    <div class="container">
+        
+        <form action="" method="GET">
+            <div class="form-group row p-3 mb-3 bg-white shadow-sm rounded">
+                <label class="col-sm-2 col-form-label fw-bold">Nome do cliente:</label>
+                <div class="col-sm-8">
+                    <input class="form-control border-dark" type="text" name="buscar" value="{{ request.GET.buscar }}" placeholder="Digite o nome do cliente">
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-dark w-100"><i class="fas fa-search text-gold"></i> Buscar</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="text-dark"><i class="fas fa-users text-gold"></i> Gestão de Clientes</h3>
+            <a href="{% url 'cliente_adicionar' %}" class="btn btn-dark text-gold fw-bold">Novo Cliente</a>
+        </div>
+
+        {% if object_list %}
+        <div class="card shadow border-dark">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-gold">Nome</th>
+                                <th class="text-gold">CPF</th>
+                                <th class="text-gold">Telefone</th>
+                                <th class="text-gold">Categoria</th>
+                                <th style="width: 100px; text-align: center" class="text-gold">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cliente in object_list %}
+                            <tr>
+                                <td>{{ cliente.nome }}</td>
+                                <td>{{ cliente.cpf }}</td>
+                                <td>{{ cliente.telefone }}</td>
+                                <td>{{ cliente.get_categoria_display }}</td>
+                                <td style="text-align: center">
+                                    <a href="{% url 'cliente_editar' cliente.pk %}" class="text-dark me-2" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'cliente_apagar' cliente.pk %}" class="text-danger" title="Excluir">
+                                        <i class="far fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    {% bootstrap_pagination object_list url="/clientes/listagem?page=1" size="sm" %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-warning border-dark text-dark mt-4">
+            <h5 class="m-0"><i class="fas fa-exclamation-triangle text-gold"></i> Não existem clientes cadastrados!</h5>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}
