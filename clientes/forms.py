@@ -8,4 +8,5 @@ class ClienteModelForm(forms.ModelForm):
         error_messages = {
             'nome': {'required': 'O nome do cliente é obrigatório.'},
             'cpf': {'required': 'O CPF é obrigatório.', 'unique': 'Este CPF já está cadastrado.'},
+            'telefone':{'required': 'o Telefone do cliente é obrigatório'}
         }
