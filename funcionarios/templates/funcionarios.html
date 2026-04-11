@@ -18,7 +18,7 @@
         </form>
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="text-dark"><i class="fas fa-users text-gold"></i> Gestão de Funcionários</h3>
+            <h3 class="text-dark"><i class="fas fa-id-badge"></i> Gestão de Funcionários</h3>
             <a href="{% url 'funcionario_adicionar' %}" class="btn btn-dark text-gold fw-bold">Novo Funcionário</a>
         </div>
 
@@ -31,7 +31,7 @@
                             <tr>
                                 <th class="text-gold">Nome</th>
                                 <th class="text-gold">CPF</th>
-                                <th class="text-gold">Categoria</th>
+                                <th class="text-gold">Cargo</th>
                                 <th style="width: 100px; text-align: center" class="text-gold">Ações</th>
                             </tr>
                         </thead>
@@ -40,7 +40,7 @@
                             <tr>
                                 <td>{{ funcionario.nome }}</td>
                                 <td>{{ funcionario.cpf }}</td>
-                                <td>{{ funcionario.get_categoria_display }}</td>
+                                <td>{{ funcionario.get_cargo_display }}</td>
                                 <td style="text-align: center">
                                     <a href="{% url 'funcionario_editar' funcionario.pk %}" class="text-dark me-2" title="Editar">
                                         <i class="fas fa-edit"></i>

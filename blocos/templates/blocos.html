@@ -1,10 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'index.html' %}
+{% load django_bootstrap5 %}
 
-</body>
-</html>
+{% block content %}
+<section class="section mt-4">
+    <div class="container">
+        
+        <form action="" method="GET">
+            <div class="form-group row p-3 mb-3 bg-white shadow-sm rounded">
+                <label class="col-sm-2 col-form-label fw-bold">Identificador do Bloco:</label>
+                <div class="col-sm-8">
+                    <input class="form-control border-dark" type="text" name="buscar" value="{{ request.GET.buscar }}" placeholder="Digite o identificador do bloco">
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-dark w-100"><i class="fas fa-search text-gold"></i> Buscar</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="text-dark"><i class="fas fa-building"></i> Gestão de Blocos</h3>
+            <a href="{% url 'bloco_adicionar' %}" class="btn btn-dark text-gold fw-bold">Novo Bloco</a>
+        </div>
+
+        {% if object_list %}
+        <div class="card shadow border-dark">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-gold">Identificador</th>
+                                <th class="text-gold">Andar</th>
+                                <th class="text-gold">Quantidade de Salas</th>
+                                <th style="width: 100px; text-align: center" class="text-gold">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bloco in object_list %}
+                            <tr>
+                                <td>{{ bloco.codigo }}</td>
+                                <td>{{ bloco.get_andar_display }}</td>
+                                <td>{{ chave.quantidade }}</td>
+                                <td style="text-align: center">
+                                    <a href="{% url 'bloco_editar' bloco.pk %}" class="text-dark me-2" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'bloco_apagar' bloco.pk %}" class="text-danger" title="Excluir">
+                                        <i class="far fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    {% bootstrap_pagination object_list url="/blocos/listagem?page=1" size="sm" %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-warning border-dark text-dark mt-4">
+            <h5 class="m-0"><i class="fas fa-exclamation-triangle text-gold"></i> Não existem blocos cadastrados!</h5>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}
