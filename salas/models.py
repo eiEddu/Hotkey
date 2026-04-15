@@ -21,5 +21,5 @@ class Sala(models.Model):
         verbose_name = 'Sala'
         verbose_name_plural = 'Salas'
 
-        def __str__(self):
-            return f"{self.codigo} - Tipo {self.get_tipo_display()}"
+    def __str__(self):
+        return f"{self.codigo}"

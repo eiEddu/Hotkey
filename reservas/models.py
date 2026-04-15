@@ -23,5 +23,5 @@ class Reserva(models.Model):
         verbose_name = 'Reserva'
         verbose_name_plural = 'Reservas'
 
-        def __str__(self):
-            return f"{self.codigo} - Status {self.get_status_display()}"
+    def __str__(self):
+        return f"{self.codigo} - Status {self.get_status_display()}"

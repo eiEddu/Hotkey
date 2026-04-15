@@ -15,5 +15,5 @@ class Funcionario(Pessoa):
         verbose_name = 'Funcionario'
         verbose_name_plural = 'Funcionarios'
 
-        def __str__(super):
-            return f"{super.nome} - Cargo {super.get_cargo_display()}"
+    def __str__(super):
+        return f"{super.nome} - Cargo {super.get_cargo_display()}"

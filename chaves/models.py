@@ -21,5 +21,5 @@ class Chave(models.Model):
         verbose_name = 'Chave'
         verbose_name_plural = 'Chaves'
 
-        def __str__(self):
-            return f"{self.codigo} - Status {self.get_status_display()} - Tipo {self.get_tipo_display()}"
+    def __str__(self):
+        return f"{self.codigo} - Status {self.get_status_display()} - Tipo {self.get_tipo_display()}"
