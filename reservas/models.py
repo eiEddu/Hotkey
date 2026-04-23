@@ -15,7 +15,7 @@ class Reserva(models.Model):
     data_inicio = models.DateTimeField('Data de início',help_text='Data de início da reserva')
     data_fim = models.DateTimeField('Data de fim',help_text='Data de fim da reserva')
     status = models.CharField('Status',max_length=50,choices=STATUS_CHOICES,default='ATIVA')
-    cliente = models.ForeignKey(clientes.models.Cliente,verbose_name='Cliente',help_text='Nome do Cliente',on_delete=models.PROTECT,related_name='cliente')
+    cliente = models.ForeignKey(clientes.models.Cliente,verbose_name='Cliente',help_text='Nome do Cliente',on_delete=models.PROTECT,related_name='reserva_cliente')
     sala = models.ForeignKey(salas.models.Sala, verbose_name='Sala',help_text='Nome do Cliente',on_delete=models.PROTECT,related_name='sala')
     funcionario = models.ForeignKey(funcionarios.models.Funcionario,verbose_name='Funcionário',help_text='Nome do Funcionário',on_delete=models.PROTECT,related_name='funcionario')
 

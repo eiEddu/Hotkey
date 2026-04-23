@@ -20,7 +20,7 @@ class ReservaListView(ListView):
             qs = qs.filter(codigo__icontains=buscar)
 
         if qs.count() >0:
-            paginator = Paginator(qs, 5)
+            paginator = Paginator(qs, 10)
             listagem = paginator.get_page(self.request.GET.get('page'))
             return listagem
         else:

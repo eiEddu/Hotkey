@@ -12,7 +12,7 @@ class Bloco(models.Model):
 
     codigo = models.CharField('Codigo',max_length=100, unique=True, help_text='Identificador do bloco')
     andar = models.CharField('Andar',max_length=100, choices=ANDAR_CHOICES, help_text='Andar do bloco',default='1')
-    quantidade = models.IntegerField('Quantidade',validators=[MinValueValidator(0), MaxValueValidator(15)],max_length=2,help_text='Quantidade de salas do bloco(Máx: 15)')
+    quantidade = models.IntegerField('Quantidade',validators=[MinValueValidator(0), MaxValueValidator(15)],help_text='Quantidade de salas do bloco(Máx: 15)')
 
     class Meta:
         verbose_name = 'Bloco'
