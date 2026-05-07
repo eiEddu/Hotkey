@@ -8,6 +8,11 @@ class Bloco(models.Model):
         ('1', 'Primeiro Andar'),
         ('2', 'Segundo Andar'),
         ('3', 'Terceiro Andar'),
+        ('4', 'Quarto Andar'),
+        ('5', 'Quinto Andar'),
+        ('6', 'Sexto Andar'),
+        ('7', 'Setimo Andar'),
+        ('8', 'Oitavo Andar'),
     ]
 
     codigo = models.CharField('Codigo',max_length=100, unique=True, help_text='Identificador do bloco')

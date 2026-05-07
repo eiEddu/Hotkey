@@ -59,11 +59,94 @@
 
     <main class="flex-grow-1">
         {% block content %}
-        <div class="container mt-5 text-center">
-            <h1 class="display-4 text-dark mt-5">Bem-vindo ao sistema <span class="text-gold fw-bold">HOTKEY</span></h1>
-            <p class="lead mt-3">Gerenciamento inteligente de chaves e acessos.</p>
-            <i class="fas fa-key fa-5x text-gold mt-4 opacity-50"></i>
+
+        <div class="container mt-4">
+            <div class="p-4 text-center bg-dark text-white rounded shadow-sm mb-4 border-bottom border-warning border-5">
+                <h2 class="text-gold mb-2"><i class="fas fa-building"></i> Sistema de Gestão HOTKEY</h2>
+                <p class="lead mb-0">Bem-vindo(a) ao painel de controle. Escolha uma das opções abaixo para começar.</p>
+            </div>
+
+            <div class="row g-4 mb-5">
+
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100 shadow border-dark text-center hover-card">
+                        <div class="card-body py-4">
+                            <h1 class="display-5 text-dark mb-3"><i class="fas fa-users"></i></h1>
+                            <h5 class="card-title text-gold fw-bold">Clientes</h5>
+                            <p class="card-text text-muted small">Cadastro e gestão de hóspedes e locatários.</p>
+                            <a href="{% url 'clientes' %}" class="btn btn-outline-dark w-100 stretched-link fw-bold">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100 shadow border-dark text-center hover-card">
+                        <div class="card-body py-4">
+                            <h1 class="display-5 text-dark mb-3"><i class="fas fa-door-open"></i></h1>
+                            <h5 class="card-title text-gold fw-bold">Salas e Blocos</h5>
+                            <p class="card-text text-muted small">Gestão de blocos, quartos e salas disponíveis.</p>
+                            <a href="{% url 'salas' %}" class="btn btn-outline-dark w-100 stretched-link fw-bold">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100 shadow border-dark text-center hover-card">
+                        <div class="card-body py-4">
+                            <h1 class="display-5 text-dark mb-3"><i class="fas fa-key"></i></h1>
+                            <h5 class="card-title text-gold fw-bold">Chaves</h5>
+                            <p class="card-text text-muted small">Controle do inventário e status das chaves físicas.</p>
+                            <a href="{% url 'chaves' %}" class="btn btn-outline-dark w-100 stretched-link fw-bold">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100 shadow border-dark text-center hover-card">
+                        <div class="card-body py-4">
+                            <h1 class="display-5 text-dark mb-3"><i class="fas fa-calendar-check"></i></h1>
+                            <h5 class="card-title text-gold fw-bold">Reservas</h5>
+                            <p class="card-text text-muted small">Agendamentos e histórico de reservas de clientes.</p>
+                            <a href="{% url 'reservas' %}" class="btn btn-outline-dark w-100 stretched-link fw-bold">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100 shadow border-dark text-center hover-card">
+                        <div class="card-body py-4">
+                            <h1 class="display-5 text-dark mb-3"><i class="fas fa-hand-holding"></i></h1>
+                            <h5 class="card-title text-gold fw-bold">Empréstimos</h5>
+                            <p class="card-text text-muted small">Registro de entrega e devolução de chaves no balcão.</p>
+                            <a href="{% url 'emprestimos' %}" class="btn btn-outline-dark w-100 stretched-link fw-bold">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100 shadow border-dark text-center hover-card">
+                        <div class="card-body py-4">
+                            <h1 class="display-5 text-dark mb-3"><i class="fas fa-id-badge"></i></h1>
+                            <h5 class="card-title text-gold fw-bold">Funcionários</h5>
+                            <p class="card-text text-muted small">Equipe autorizada a operar o sistema.</p>
+                            <a href="{% url 'funcionarios' %}" class="btn btn-outline-dark w-100 stretched-link fw-bold">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
+
+        <style>
+            .hover-card {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .hover-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+            }
+        </style>
+
         {% endblock %}
     </main>
 

@@ -8,7 +8,7 @@ from .models import Sala
 class QuartoModelForm(forms.ModelForm):
     class Meta:
         model = Sala
-        fields = ['codigo', 'status']
+        fields = ['codigo', 'status','andar']
         error_messages = {
             'codigo': {'required':'O identificador da sala é obrigatório', 'unique':'O identificador informado já existe'}
         }
