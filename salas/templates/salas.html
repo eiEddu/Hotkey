@@ -19,7 +19,10 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="text-dark"><i class="fas fa-building"></i> Gestão de Salas</h3>
-            <a href="{% url 'sala_adicionar' %}" class="btn btn-dark text-gold fw-bold">Nova Sala</a>
+            <div class="d-flex gap-2">
+                <a href="{% url 'quarto_adicionar' %}" class="btn btn-dark text-gold fw-bold shadow-sm">Novo Quarto</a>
+                <a href="{% url 'sala_comercial_adicionar' %}" class="btn btn-dark text-gold fw-bold shadow-sm">Nova Sala Comercial</a>
+            </div>
         </div>
 
         {% if object_list %}
@@ -31,6 +34,7 @@
                             <tr>
                                 <th class="text-gold">Identificador</th>
                                 <th class="text-gold">Tipo</th>
+                                <th class="text-gold">Bloco</th>
                                 <th class="text-gold">Status</th>
                                 <th style="width: 100px; text-align: center" class="text-gold">Ações</th>
                             </tr>
@@ -40,6 +44,7 @@
                             <tr>
                                 <td>{{ sala.codigo }}</td>
                                 <td>{{ sala.get_tipo_display }}</td>
+                                <td>{{ sala.bloco.codigo|default:"---" }}</td>
                                 <td>{{ sala.get_status_display }}</td>
                                 <td style="text-align: center">
                                     <a href="{% url 'sala_editar' sala.pk %}" class="text-dark me-2" title="Editar">

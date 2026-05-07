@@ -3,10 +3,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-
-from .forms import ReservaModelForm
+from .forms import ReservaQuartoForm, ReservaSalaComercialForm
 from .models import Reserva
-
 
 class ReservaListView(ListView):
     model = Reserva
@@ -19,23 +17,30 @@ class ReservaListView(ListView):
         if buscar:
             qs = qs.filter(codigo__icontains=buscar)
 
-        if qs.count() >0:
+        if qs.count() > 0:
             paginator = Paginator(qs, 10)
             listagem = paginator.get_page(self.request.GET.get('page'))
             return listagem
         else:
-            return messages.info(self.request,'Não existem reservas!')
+            return messages.info(self.request, 'Não existem reservas!')
 
-class ReservaCreateView(SuccessMessageMixin, CreateView):
+class ReservaQuartoCreateView(SuccessMessageMixin, CreateView):
     model = Reserva
-    form_class = ReservaModelForm
+    form_class = ReservaQuartoForm
     template_name = 'reserva_form.html'
     success_url = reverse_lazy('reservas')
-    success_message = 'Reserva criada com sucesso!'
+    success_message = 'Reserva de Quarto criada com sucesso!'
+
+class ReservaSalaComercialCreateView(SuccessMessageMixin, CreateView):
+    model = Reserva
+    form_class = ReservaSalaComercialForm
+    template_name = 'reserva_form.html'
+    success_url = reverse_lazy('reservas')
+    success_message = 'Reserva de Sala Comercial criada com sucesso!'
 
 class ReservaUpdateView(SuccessMessageMixin, UpdateView):
     model = Reserva
-    form_class = ReservaModelForm
+    form_class = ReservaQuartoForm
     template_name = 'reserva_form.html'
     success_url = reverse_lazy('reservas')
     success_message = 'Reserva atualizada com sucesso!'

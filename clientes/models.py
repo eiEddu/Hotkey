@@ -10,7 +10,6 @@ class Cliente(Pessoa):
         ('PRATA', 'Prata (2 Reservas)'),
         ('OURO', 'Ouro (3 Reservas)'),
     ]
-
     telefone = models.CharField('Telefone', max_length=20)
     categoria = models.CharField('Categoria', max_length=20, choices=CATEGORIA_CHOICES, default='BRONZE')
 
@@ -18,5 +17,5 @@ class Cliente(Pessoa):
         verbose_name = 'Cliente'
         verbose_name_plural = 'Clientes'
 
-    def __str__(super):
-        return f"{super.nome} - Categoria {super.get_categoria_display()}"
+    def __str__(self):
+        return f"{self.nome} - CPF: {self.cpf}"

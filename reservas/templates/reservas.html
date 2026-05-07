@@ -4,7 +4,7 @@
 {% block content %}
 <section class="section mt-4">
     <div class="container">
-        
+
         <form action="" method="GET">
             <div class="form-group row p-3 mb-3 bg-white shadow-sm rounded">
                 <label class="col-sm-2 col-form-label fw-bold">Código da reserva:</label>
@@ -19,7 +19,14 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="text-dark"><i class="fas fa-calendar-check"></i> Gestão de Reservas</h3>
-            <a href="{% url 'reserva_adicionar' %}" class="btn btn-dark text-gold fw-bold">Nova Reserva</a>
+            <div class="d-flex gap-2">
+                <a href="{% url 'reserva_quarto_adicionar' %}" class="btn btn-dark text-gold fw-bold shadow-sm">
+                    <i class="fas fa-bed"></i> Reservar Quarto
+                </a>
+                <a href="{% url 'reserva_sala_comercial_adicionar' %}" class="btn btn-dark text-gold fw-bold shadow-sm">
+                    <i class="fas fa-briefcase"></i> Reservar Sala Comercial
+                </a>
+            </div>
         </div>
 
         {% if object_list %}
@@ -33,10 +40,10 @@
                                 <th class="text-gold">Data de Início</th>
                                 <th class="text-gold">Data Final</th>
                                 <th class="text-gold">Cliente</th>
-                                <th class="text-gold">Sala</th>
+                                <th class="text-gold">Sala/Quarto</th>
                                 <th class="text-gold">Funcionário</th>
                                 <th class="text-gold">Status</th>
-                                <th style="width: 100px; text-align: center" class="text- gold">Ações</th>
+                                <th style="width: 100px; text-align: center" class="text-gold">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,7 +53,7 @@
                                 <td>{{ reserva.data_inicio }}</td>
                                 <td>{{ reserva.data_fim }}</td>
                                 <td>{{ reserva.cliente.nome }}</td>
-                                <td>{{ reserva.sala.codigo }}</td>
+                                <td>{{ reserva.sala.codigo }} ({{ reserva.sala.get_tipo_display }})</td>
                                 <td>{{ reserva.funcionario.nome }}</td>
                                 <td>{{ reserva.get_status_display }}</td>
                                 <td style="text-align: center">
