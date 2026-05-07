@@ -34,7 +34,7 @@
                             <tr>
                                 <th class="text-gold">Identificador</th>
                                 <th class="text-gold">Tipo</th>
-                                <th class="text-gold">Bloco</th>
+                                <th class="text-gold">Bloco/Andar</th>
                                 <th class="text-gold">Status</th>
                                 <th style="width: 100px; text-align: center" class="text-gold">Ações</th>
                             </tr>
@@ -44,13 +44,26 @@
                             <tr>
                                 <td>{{ sala.codigo }}</td>
                                 <td>{{ sala.get_tipo_display }}</td>
-                                <td>{{ sala.bloco.codigo|default:"---" }}</td>
+                                <td>
+                                    {% if sala.tipo == 'QUARTO' %}
+                                        {{sala.get_andar_display}}
+                                    {% else %}
+                                        {{sala.bloco}}
+                                    {% endif %}
+                                </td>
                                 <td>{{ sala.get_status_display }}</td>
                                 <td style="text-align: center">
-                                    <a href="{% url 'sala_editar' sala.pk %}" class="text-dark me-2" title="Editar">
+
+                                {% if sala.tipo == 'QUARTO' %}
+                                    <a href="{% url 'quarto_editar' sala.pk %}" class="btn btn-sm btn-outline-dark me-1" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="{% url 'sala_apagar' sala.pk %}" class="text-danger" title="Excluir">
+                                {% else %}
+                                    <a href="{% url 'sala_comercial_editar' sala.pk %}" class="btn btn-sm btn-outline-dark me-1" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                {% endif %}
+                                    <a href="{% url 'sala_apagar' sala.pk %}" class="btn btn-sm btn-outline-danger me-1" title="Excluir">
                                         <i class="far fa-trash-alt"></i>
                                     </a>
                                 </td>

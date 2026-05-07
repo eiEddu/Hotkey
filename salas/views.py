@@ -46,7 +46,14 @@ class SalaComercialCreateView(SuccessMessageMixin, CreateView):
         form.instance.tipo = 'SALA COMERCIAL' # Define o tipo
         return super().form_valid(form)
 
-class SalaUpdateView(SuccessMessageMixin, UpdateView):
+class QuartoUpdateView(SuccessMessageMixin, UpdateView):
+    model = Sala
+    form_class = QuartoModelForm
+    template_name = 'sala_form.html'
+    success_url = reverse_lazy('salas')
+    success_message = 'Sala alterada com sucesso!'
+
+class SalaComercialUpdateView(SuccessMessageMixin, UpdateView):
     model = Sala
     form_class = SalaComercialModelForm
     template_name = 'sala_form.html'

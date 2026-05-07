@@ -38,9 +38,16 @@ class ReservaSalaComercialCreateView(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('reservas')
     success_message = 'Reserva de Sala Comercial criada com sucesso!'
 
-class ReservaUpdateView(SuccessMessageMixin, UpdateView):
+class ReservaQuartoUpdateView(SuccessMessageMixin, UpdateView):
     model = Reserva
     form_class = ReservaQuartoForm
+    template_name = 'reserva_form.html'
+    success_url = reverse_lazy('reservas')
+    success_message = 'Reserva atualizada com sucesso!'
+
+class ReservaSalaComercialUpdateView(SuccessMessageMixin, UpdateView):
+    model = Reserva
+    form_class = ReservaSalaComercialForm
     template_name = 'reserva_form.html'
     success_url = reverse_lazy('reservas')
     success_message = 'Reserva atualizada com sucesso!'

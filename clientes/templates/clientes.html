@@ -44,10 +44,10 @@
                                 <td>{{ cliente.telefone }}</td>
                                 <td>{{ cliente.get_categoria_display }}</td>
                                 <td style="text-align: center">
-                                    <a href="{% url 'cliente_editar' cliente.pk %}" class="text-dark me-2" title="Editar">
+                                    <a href="{% url 'cliente_editar' cliente.pk %}" class="btn btn-sm btn-outline-dark me-1" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="{% url 'cliente_apagar' cliente.pk %}" class="text-danger" title="Excluir">
+                                    <a href="{% url 'cliente_apagar' cliente.pk %}" class="btn btn-sm btn-outline-danger me-1" title="Excluir">
                                         <i class="far fa-trash-alt"></i>
                                     </a>
                                 </td>

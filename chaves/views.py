@@ -57,7 +57,21 @@ class ChaveSalaComercialCreateView(SuccessMessageMixin, CreateView):
         form.instance.tipo = 'SALA'
         return super().form_valid(form)
 
-class ChaveUpdateView(SuccessMessageMixin, UpdateView):
+class ChaveBlocoUpdateView(SuccessMessageMixin, UpdateView):
+    model = Chave
+    form_class = ChaveBlocoModelForm
+    template_name = 'chave_form.html'
+    success_url = reverse_lazy('chaves')
+    success_message = 'Chave atualizada com sucesso!'
+
+class ChaveQuartoUpdateView(SuccessMessageMixin, UpdateView):
+    model = Chave
+    form_class = ChaveQuartoModelForm
+    template_name = 'chave_form.html'
+    success_url = reverse_lazy('chaves')
+    success_message = 'Chave atualizada com sucesso!'
+
+class ChaveSalaComercialUpdateView(SuccessMessageMixin, UpdateView):
     model = Chave
     form_class = ChaveSalaComercialModelForm
     template_name = 'chave_form.html'

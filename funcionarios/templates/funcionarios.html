@@ -42,10 +42,10 @@
                                 <td>{{ funcionario.cpf }}</td>
                                 <td>{{ funcionario.get_cargo_display }}</td>
                                 <td style="text-align: center">
-                                    <a href="{% url 'funcionario_editar' funcionario.pk %}" class="text-dark me-2" title="Editar">
+                                    <a href="{% url 'funcionario_editar' funcionario.pk %}" class="btn btn-sm btn-outline-dark me-1" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="{% url 'funcionario_apagar' funcionario.pk %}" class="text-danger" title="Excluir">
+                                    <a href="{% url 'funcionario_apagar' funcionario.pk %}" class="btn btn-sm btn-outline-danger me-1" title="Excluir">
                                         <i class="far fa-trash-alt"></i>
                                     </a>
                                 </td>

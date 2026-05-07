@@ -42,10 +42,10 @@
                                 <td>{{ bloco.get_andar_display }}</td>
                                 <td>{{ bloco.quantidade }}</td>
                                 <td style="text-align: center">
-                                    <a href="{% url 'bloco_editar' bloco.pk %}" class="text-dark me-2" title="Editar">
+                                    <a href="{% url 'bloco_editar' bloco.pk %}" class="btn btn-sm btn-outline-dark me-1" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="{% url 'bloco_apagar' bloco.pk %}" class="text-danger" title="Excluir">
+                                    <a href="{% url 'bloco_apagar' bloco.pk %}" class="btn btn-sm btn-outline-danger me-1" title="Excluir">
                                         <i class="far fa-trash-alt"></i>
                                     </a>
                                 </td>

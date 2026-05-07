@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV 'C:\UFSM\Semestre 3\Projeto Integrador\Hotkey\venv'
+set -gx VIRTUAL_ENV 'C:\Users\aluno\PycharmProjects\ProjetoIntegrador\New 07.05\Hotkey\venv'
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"Scripts $PATH

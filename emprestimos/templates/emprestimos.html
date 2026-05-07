@@ -60,11 +60,11 @@
                                 <td>{{ emprestimo.get_status_display }}</td>
                                 <td style="text-align: center">
                                     {% if emprestimo.status == 'ATIVO' %}
-                                    <a href="{% url 'emprestimo_devolver' emprestimo.pk %}" class="text-success me-2" title="Finalizar/Devolver">
+                                    <a href="{% url 'emprestimo_devolver' emprestimo.pk %}" class="btn btn-sm btn-outline-success me-1" title="Finalizar/Devolver">
                                         <i class="fas fa-check-circle"></i>
                                     </a>
                                     {% endif %}
-                                    <a href="{% url 'emprestimo_apagar' emprestimo.pk %}" class="text-danger" title="Excluir">
+                                    <a href="{% url 'emprestimo_apagar' emprestimo.pk %}" class="btn btn-sm btn-outline-danger me-1" title="Excluir">
                                         <i class="far fa-trash-alt"></i>
                                     </a>
                                 </td>

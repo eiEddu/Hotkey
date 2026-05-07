@@ -24,4 +24,4 @@ class Bloco(models.Model):
         verbose_name_plural = 'Blocos'
 
     def __str__(self):
-        return f"{self.codigo} - Andar {self.get_andar_display()}"
+        return f"{self.codigo} - {self.get_andar_display()}"
