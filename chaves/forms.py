@@ -7,7 +7,7 @@ from salas.models import Sala  # Precisamos importar o model Sala para filtrar!
 class ChaveBlocoModelForm(forms.ModelForm):
     class Meta:
         model = Chave
-        fields = ['codigo', 'status', 'bloco']
+        fields = ['status', 'bloco']
 
 # 2. Form de Quarto
 class ChaveQuartoModelForm(forms.ModelForm):
@@ -17,7 +17,7 @@ class ChaveQuartoModelForm(forms.ModelForm):
     )
     class Meta:
         model = Chave
-        fields = ['codigo', 'status', 'sala']
+        fields = ['status', 'sala']
 
 
 # 3. Form de Sala Comercial
@@ -29,4 +29,4 @@ class ChaveSalaComercialModelForm(forms.ModelForm):
 
     class Meta:
         model = Chave
-        fields = ['codigo', 'status', 'sala']
+        fields = ['status', 'sala']

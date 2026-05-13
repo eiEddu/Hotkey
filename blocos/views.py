@@ -32,6 +32,14 @@ class BlocoCreateView(CreateView):
     success_url = reverse_lazy('blocos')
     success_message = 'Bloco cadastrado com sucesso!'
 
+    def form_valid(self, form):
+        self.object = form.save()
+        codigo = "AN" + form.cleaned_data['andar'] + "BL" + str(self.object.pk)
+        self.object.codigo = codigo
+        self.object.save()
+
+        return super().form_valid(form)
+
 class BlocoUpdateView(UpdateView):
     model = Bloco
     form_class = BlocoModelForm

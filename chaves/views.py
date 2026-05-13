@@ -33,6 +33,9 @@ class ChaveBlocoCreateView(SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.tipo = 'BLOCO'
+        self.object = form.save()
+        codigo = form.cleaned_data['bloco'].codigo + "CH" + str(self.object.pk)
+        self.object.codigo = codigo
         return super().form_valid(form)
 
 class ChaveQuartoCreateView(SuccessMessageMixin, CreateView):
@@ -44,6 +47,9 @@ class ChaveQuartoCreateView(SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.tipo = 'SALA'
+        self.object = form.save()
+        codigo = form.cleaned_data['sala'].codigo + "CH" + str(self.object.pk)
+        self.object.codigo = codigo
         return super().form_valid(form)
 
 class ChaveSalaComercialCreateView(SuccessMessageMixin, CreateView):
@@ -55,6 +61,9 @@ class ChaveSalaComercialCreateView(SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.tipo = 'SALA'
+        self.object = form.save()
+        codigo = str(form.cleaned_data['sala'].pk) + "CH" + str(self.object.pk)
+        self.object.codigo = codigo
         return super().form_valid(form)
 
 class ChaveBlocoUpdateView(SuccessMessageMixin, UpdateView):

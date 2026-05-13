@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
+from blocos.models import Bloco
 from .forms import QuartoModelForm, SalaComercialModelForm
 from .models import Sala
 
@@ -33,6 +34,12 @@ class QuartoCreateView(SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.tipo = 'QUARTO' # Define o tipo
+        self.object = form.save()
+        if self.object.pk < 10:
+            codigo = "QU" + form.cleaned_data['andar'] + "0" + str(self.object.pk)
+        else:
+            codigo = "QU" + form.cleaned_data['andar'] + str(self.object.pk)
+        self.object.codigo = codigo
         return super().form_valid(form)
 
 class SalaComercialCreateView(SuccessMessageMixin, CreateView):
@@ -44,6 +51,9 @@ class SalaComercialCreateView(SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.tipo = 'SALA COMERCIAL' # Define o tipo
+        self.object = form.save()
+        codigo = form.cleaned_data['bloco'].codigo + "SA" + str(self.object.pk)
+        self.object.codigo = codigo
         return super().form_valid(form)
 
 class QuartoUpdateView(SuccessMessageMixin, UpdateView):

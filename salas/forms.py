@@ -8,16 +8,16 @@ from .models import Sala
 class QuartoModelForm(forms.ModelForm):
     class Meta:
         model = Sala
-        fields = ['codigo', 'status','andar']
+        fields = ['status','andar']
         error_messages = {
-            'codigo': {'required':'O identificador da sala é obrigatório', 'unique':'O identificador informado já existe'}
+            #'codigo': {'required':'O identificador da sala é obrigatório', 'unique':'O identificador informado já existe'}
         }
 
 # Form 2: Para Salas Comerciais (Mostra o bloco)
 class SalaComercialModelForm(forms.ModelForm):
     class Meta:
         model = Sala
-        fields = ['codigo', 'status', 'bloco']
+        fields = ['status', 'bloco']
         error_messages = {
-            'codigo': {'required':'O identificador da sala é obrigatório', 'unique':'O identificador informado já existe'}
+            #'codigo': {'required':'O identificador da sala é obrigatório', 'unique':'O identificador informado já existe'}
         }

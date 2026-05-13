@@ -11,7 +11,7 @@ class Chave(models.Model):
         ('SALA','Sala')
     ]
 
-    codigo = models.CharField('Identificador', unique=True, max_length=100)
+    codigo = models.CharField('Identificador', max_length=100)
     tipo = models.CharField('Tipo', max_length=50, choices=TIPO_CHOICES, default='BLOCO')
     status = models.CharField('Status', max_length=50, choices=STATUS_CHOICES, default='DISPONÍVEL')
     bloco = models.ForeignKey('blocos.Bloco', on_delete=models.PROTECT, null=True, blank=True)

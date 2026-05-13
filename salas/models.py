@@ -24,7 +24,7 @@ class Sala(models.Model):
         ('8', 'Oitavo Andar'),
     ]
 
-    codigo = models.CharField('Codigo', max_length=100, unique=True,help_text='Identificador da sala')
+    codigo = models.CharField('Codigo', max_length=100,help_text='Identificador da sala')
     tipo = models.CharField('Tipo', max_length=50, choices=TIPO_CHOICES, default='QUARTO')
     status = models.CharField('Status',max_length=50,choices=STATUS_CHOICES,help_text='Status da sala',default='DISPONÍVEL')
     andar = models.CharField('Andar',max_length=50,choices=ANDAR_CHOICES,null=True, blank=True)
