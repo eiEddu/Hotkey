@@ -19,8 +19,8 @@
             </button>
 
             <div class="collapse navbar-collapse" id="menuPrincipal">
+                {% if request.user.is_authenticated %}
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle fw-bold" href="#" id="menuCadastros" role="button" data-bs-toggle="dropdown">
                             <i class="fas fa-edit text-gold"></i> Cadastros
@@ -43,8 +43,41 @@
                             <li><a class="dropdown-item" href="{% url 'emprestimos' %}"><i class="fas fa-hand-holding"></i> Empréstimos</a></li>
                         </ul>
                     </li>
-
                 </ul>
+
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-bold text-white" href="#" id="menuUsuario" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle text-gold"></i> Olá, {{ request.user.username|title }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item text-white fw-bold" href="{% url 'alterar_senha' %}">
+                                    <i class="fas fa-lock"></i> Alterar Senha
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="dropdown-item text-danger fw-bold" type="submit">
+                                        <i class="fas fa-sign-out-alt"></i> Sair do Sistema
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                {% else %}
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold text-gold" href="{% url 'login' %}">
+                            <i class="fas fa-sign-in-alt"></i> Acessar
+                        </a>
+                    </li>
+                </ul>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -60,6 +93,7 @@
     <main class="flex-grow-1">
         {% block content %}
 
+        {% if request.user.is_authenticated %}
         <div class="container mt-4">
             <div class="p-4 text-center bg-dark text-white rounded shadow-sm mb-4 border-bottom border-warning border-5">
                 <h2 class="text-gold mb-2"><i class="fas fa-building"></i> Sistema de Gestão HOTKEY</h2>
@@ -67,7 +101,6 @@
             </div>
 
             <div class="row g-4 mb-5">
-
                 <div class="col-md-4 col-sm-6">
                     <div class="card h-100 shadow border-dark text-center hover-card">
                         <div class="card-body py-4">
@@ -82,7 +115,7 @@
                 <div class="col-md-4 col-sm-6">
                     <div class="card h-100 shadow border-dark text-center hover-card">
                         <div class="card-body py-4">
-                            <h1 class="display-5 text-dark mb-3"><i class="fas fa-users"></i></h1>
+                            <h1 class="display-5 text-dark mb-3"><i class="fas fa-building"></i></h1>
                             <h5 class="card-title text-gold fw-bold">Blocos</h5>
                             <p class="card-text text-muted small">Cadastro e gestão de blocos.</p>
                             <a href="{% url 'blocos' %}" class="btn btn-outline-dark w-100 stretched-link fw-bold">Acessar</a>
@@ -94,7 +127,7 @@
                     <div class="card h-100 shadow border-dark text-center hover-card">
                         <div class="card-body py-4">
                             <h1 class="display-5 text-dark mb-3"><i class="fas fa-door-open"></i></h1>
-                            <h5 class="card-title text-gold fw-bold">Salas e Blocos</h5>
+                            <h5 class="card-title text-gold fw-bold">Salas e Quartos</h5>
                             <p class="card-text text-muted small">Gestão de quartos e salas disponíveis.</p>
                             <a href="{% url 'salas' %}" class="btn btn-outline-dark w-100 stretched-link fw-bold">Acessar</a>
                         </div>
@@ -144,19 +177,24 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
         <style>
-            .hover-card {
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-            .hover-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
-            }
+            .hover-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+            .hover-card:hover { transform: translateY(-5px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important; }
         </style>
+
+        {% else %}
+        <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 70vh;">
+            <i class="fas fa-key text-gold mb-3" style="font-size: 10rem; opacity: 0.9;"></i>
+            <h1 class="display-1 fw-bold text-dark" style="letter-spacing: 8px;">HOTKEY</h1>
+            <p class="lead text-muted mt-2 fw-bold">Sistema Inteligente de Gestão de Chaves</p>
+            <a href="{% url 'login' %}" class="btn btn-gold btn-lg mt-4 px-5 py-3 fw-bold shadow-lg rounded-pill">
+                <i class="fas fa-lock text-dark me-2"></i> ACESSAR SISTEMA
+            </a>
+        </div>
+        {% endif %}
 
         {% endblock %}
     </main>

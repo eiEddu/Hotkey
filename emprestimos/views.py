@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.shortcuts import redirect
@@ -9,7 +11,9 @@ from .models import Emprestimo
 from chaves.models import Chave
 
 
-class EmprestimoListView(ListView):
+class EmprestimoListView(PermissionRequiredMixin,ListView):
+    permission_required = 'emprestimos.view_emprestimo'
+    permission_denied_message = 'Visualizar empréstimo'
     model = Emprestimo
     template_name = 'emprestimos.html'
 
@@ -21,7 +25,9 @@ class EmprestimoListView(ListView):
         return qs
 
 
-class EmprestimoQuartoCreateView(CreateView):
+class EmprestimoQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
+    permission_required = 'emprestimos.create_emprestimo'
+    permission_denied_message = 'Cadastrar empréstimo'
     model = Emprestimo
     form_class = EmprestimoQuartoForm
     template_name = 'emprestimo_form.html'
@@ -47,7 +53,9 @@ class EmprestimoQuartoCreateView(CreateView):
         return super().form_valid(form)
 
 
-class EmprestimoSalaComercialCreateView(CreateView):
+class EmprestimoSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
+    permission_required = 'emprestimos.create_emprestimo'
+    permission_denied_message = 'Cadastrar empréstimo'
     model = Emprestimo
     form_class = EmprestimoSalaComercialForm
     template_name = 'emprestimo_form.html'
@@ -77,7 +85,7 @@ class EmprestimoSalaComercialCreateView(CreateView):
         return super().form_valid(form)
 
 
-class EmprestimoDeleteView(DeleteView):
+class EmprestimoDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
     model = Emprestimo
     template_name = 'emprestimo_apagar.html'
     success_url = reverse_lazy('emprestimos')

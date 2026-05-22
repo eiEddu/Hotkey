@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
@@ -6,7 +7,9 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .forms import ChaveBlocoModelForm, ChaveQuartoModelForm, ChaveSalaComercialModelForm
 from .models import Chave
 
-class ChaveListView(ListView):
+class ChaveListView(PermissionRequiredMixin,ListView):
+    permission_required = 'chaves.view_chave'
+    permission_denied_message = 'Visualizar chave'
     model = Chave
     template_name = 'chaves.html'
 
@@ -24,7 +27,9 @@ class ChaveListView(ListView):
         else:
             return messages.info(self.request, 'Não existem chaves cadastradas!')
 
-class ChaveBlocoCreateView(SuccessMessageMixin, CreateView):
+class ChaveBlocoCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
+    permission_required = 'chaves.add_chave'
+    permission_denied_message = 'Cadastrar chave de Bloco'
     model = Chave
     form_class = ChaveBlocoModelForm
     template_name = 'chave_form.html'
@@ -38,7 +43,9 @@ class ChaveBlocoCreateView(SuccessMessageMixin, CreateView):
         self.object.codigo = codigo
         return super().form_valid(form)
 
-class ChaveQuartoCreateView(SuccessMessageMixin, CreateView):
+class ChaveQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
+    permission_required = 'chaves.add_chave'
+    permission_denied_message = 'Cadastrar chave de Quarto'
     model = Chave
     form_class = ChaveQuartoModelForm
     template_name = 'chave_form.html'
@@ -52,7 +59,9 @@ class ChaveQuartoCreateView(SuccessMessageMixin, CreateView):
         self.object.codigo = codigo
         return super().form_valid(form)
 
-class ChaveSalaComercialCreateView(SuccessMessageMixin, CreateView):
+class ChaveSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
+    permission_required = 'chaves.add_chave'
+    permission_denied_message = 'Cadastrar chave de Sala Comercial'
     model = Chave
     form_class = ChaveSalaComercialModelForm
     template_name = 'chave_form.html'
@@ -66,21 +75,27 @@ class ChaveSalaComercialCreateView(SuccessMessageMixin, CreateView):
         self.object.codigo = codigo
         return super().form_valid(form)
 
-class ChaveBlocoUpdateView(SuccessMessageMixin, UpdateView):
+class ChaveBlocoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
+    permission_required = 'chaves.update_chave'
+    permission_denied_message = 'Atualizar chave de Bloco'
     model = Chave
     form_class = ChaveBlocoModelForm
     template_name = 'chave_form.html'
     success_url = reverse_lazy('chaves')
     success_message = 'Chave atualizada com sucesso!'
 
-class ChaveQuartoUpdateView(SuccessMessageMixin, UpdateView):
+class ChaveQuartoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
+    permission_required = 'chaves.update_chave'
+    permission_denied_message = 'Atualizar chave de Quarto'
     model = Chave
     form_class = ChaveQuartoModelForm
     template_name = 'chave_form.html'
     success_url = reverse_lazy('chaves')
     success_message = 'Chave atualizada com sucesso!'
 
-class ChaveSalaComercialUpdateView(SuccessMessageMixin, UpdateView):
+class ChaveSalaComercialUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
+    permission_required = 'chaves.update_chave'
+    permission_denied_message = 'Atualizar chave de Sala Comercial'
     model = Chave
     form_class = ChaveSalaComercialModelForm
     template_name = 'chave_form.html'
@@ -88,7 +103,9 @@ class ChaveSalaComercialUpdateView(SuccessMessageMixin, UpdateView):
     success_message = 'Chave atualizada com sucesso!'
 
 
-class ChaveDeleteView(SuccessMessageMixin, DeleteView):
+class ChaveDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteView):
+    required_permission = 'chaves.delete_chave'
+    permission_required = 'Deletar chave'
     model = Chave
     template_name = 'chave_apagar.html'
     success_url = reverse_lazy('chaves')

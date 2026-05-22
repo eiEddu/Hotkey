@@ -11,6 +11,8 @@
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
+                {% bootstrap_form_errors form %}
+
                 {% bootstrap_field form.codigo %}
                 {% bootstrap_field form.status %}
                 {% bootstrap_field form.cliente %}
@@ -25,7 +27,7 @@
                         {% bootstrap_field form.data_fim %}
                     </div>
                 </div>
-                
+
                 <div class="text-end mt-4">
                     <button class="btn btn-gold" type="submit"><i class="fas fa-save"></i> Salvar</button>
                     <a href="{% url 'reservas' %}" class="btn btn-dark text-white" type="button">
