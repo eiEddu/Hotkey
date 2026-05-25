@@ -26,7 +26,7 @@ class EmprestimoListView(PermissionRequiredMixin,ListView):
 
 
 class EmprestimoQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
-    permission_required = 'emprestimos.create_emprestimo'
+    permission_required = 'emprestimos.add_emprestimo'
     permission_denied_message = 'Cadastrar empréstimo'
     model = Emprestimo
     form_class = EmprestimoQuartoForm
@@ -35,6 +35,15 @@ class EmprestimoQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin,Cre
 
     def form_valid(self, form):
         reserva = form.cleaned_data['reserva']
+        cliente = form.cleaned_data['cliente']
+
+        tem_atraso = Emprestimo.objects.filter(
+            cliente=cliente, status='ATIVO', data_devolucao__lt=timezone.now()
+        ).exists()
+        if tem_atraso:
+            messages.error(self.request, "BLOQUEIO: O cliente possui chaves com entrega em atraso!")
+            return self.form_invalid(form)
+
         chave = Chave.objects.filter(sala=reserva.sala, status='DISPONÍVEL').first()
 
         if not chave:
@@ -54,7 +63,7 @@ class EmprestimoQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin,Cre
 
 
 class EmprestimoSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
-    permission_required = 'emprestimos.create_emprestimo'
+    permission_required = 'emprestimos.add_emprestimo'
     permission_denied_message = 'Cadastrar empréstimo'
     model = Emprestimo
     form_class = EmprestimoSalaComercialForm
@@ -63,6 +72,19 @@ class EmprestimoSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMi
 
     def form_valid(self, form):
         reserva = form.cleaned_data['reserva']
+        cliente = form.cleaned_data['cliente']
+
+        tem_atraso = Emprestimo.objects.filter(
+            cliente=cliente, status='ATIVO', data_devolucao__lt=timezone.now()
+        ).exists()
+        if tem_atraso:
+            messages.error(self.request, "BLOQUEIO: O cliente possui chaves com entrega em atraso!")
+            return self.form_invalid(form)
+
+        chaves_bloco_disponiveis = Chave.objects.filter(bloco=reserva.sala.bloco, status='DISPONÍVEL').count()
+        if chaves_bloco_disponiveis <= 1:
+            messages.error(self.request, "BLOQUEIO: Apenas a cópia de emergência do bloco está disponível no estoque!")
+            return self.form_invalid(form)
         chave_s = Chave.objects.filter(sala=reserva.sala, status='DISPONÍVEL').first()
         chave_b = Chave.objects.filter(bloco=reserva.sala.bloco, status='DISPONÍVEL').first()
 
