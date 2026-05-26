@@ -35,5 +35,8 @@ class Sala(models.Model):
         verbose_name = 'Sala'
         verbose_name_plural = 'Salas'
 
+    def chaves_disponiveis(self):
+        return self.chave_set.filter(status='DISPONÍVEL').count()
+
     def __str__(self):
         return f"{self.codigo}"

@@ -36,6 +36,7 @@
                                 <th class="text-gold">Tipo</th>
                                 <th class="text-gold">Bloco/Andar</th>
                                 <th class="text-gold">Status</th>
+                                <th class="text-gold">Chaves disponíveis</th>
                                 <th style="width: 100px; text-align: center" class="text-gold">Ações</th>
                             </tr>
                         </thead>
@@ -52,6 +53,7 @@
                                     {% endif %}
                                 </td>
                                 <td>{{ sala.get_status_display }}</td>
+                                <td>{{ sala.chaves_disponiveis }}</td>
                                 <td style="text-align: center">
 
                                 {% if sala.tipo == 'QUARTO' %}

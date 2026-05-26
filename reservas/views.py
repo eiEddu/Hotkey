@@ -45,7 +45,7 @@ class ReservaSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin
     success_url = reverse_lazy('reservas')
     success_message = 'Reserva de Sala Comercial criada com sucesso!'
 
-class ReservaQuartoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
+class ReservaQuartoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
     permission_required = 'reservas.update_reserva'
     permission_denied = 'Atualizar reserva de Quarto'
     model = Reserva
@@ -54,7 +54,7 @@ class ReservaQuartoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, Creat
     success_url = reverse_lazy('reservas')
     success_message = 'Reserva atualizada com sucesso!'
 
-class ReservaSalaComercialUpdateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
+class ReservaSalaComercialUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
     permission_required = 'reservas.update_reserva'
     permission_denied = 'Atualizar reserva de Sala Comercial'
     model = Reserva

@@ -13,6 +13,7 @@ class ChaveListView(PermissionRequiredMixin,ListView):
     model = Chave
     template_name = 'chaves.html'
 
+
     def get_queryset(self):
         buscar = self.request.GET.get('buscar')
         qs = super(ChaveListView, self).get_queryset()
