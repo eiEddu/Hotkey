@@ -12,6 +12,7 @@ class Cliente(Pessoa):
     ]
     telefone = models.CharField('Telefone', max_length=20)
     categoria = models.CharField('Categoria', max_length=20, choices=CATEGORIA_CHOICES, default='BRONZE')
+    email = models.EmailField('E-mail', max_length=50, unique=True, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Cliente'

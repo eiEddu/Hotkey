@@ -1,0 +1,19 @@
+Olá {{cliente}}!
+Estamos enviando este e-mail para confirmar a retirada da chave vinculada à sua reserva.
+
+<h3>Dados do Empréstimo:</h3>
+Código do Empréstimo: {{ codigo_emprestimo }}
+Reserva vinculada: {{ reserva_codigo }}
+Chave da Sala/Quarto: {{ chave_codigo }}
+
+{% if chave_bloco_codigo %}
+Chave do Bloco: {{ chave_bloco_codigo }}
+{% endif %}
+
+Prazo de Devolução: {{ data_devolucao }}
+
+Lembramos que as chaves devem ser devolvidas no balcão até o horário estipulado para evitar bloqueios no sistema.
+
+Agradecemos pela preferência! Tenha uma excelente estadia/reunião!
+
+HOTKEY

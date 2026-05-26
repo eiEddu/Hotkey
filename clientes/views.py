@@ -19,6 +19,7 @@ class ClienteListView(PermissionRequiredMixin,ListView):
         nome = self.request.GET.get('nome')
         cpf = self.request.GET.get('cpf')
         telefone = self.request.GET.get('telefone')
+        email = self.request.GET.get('email')
         categoria = self.request.GET.get('categoria')
 
         if nome:
@@ -27,6 +28,8 @@ class ClienteListView(PermissionRequiredMixin,ListView):
             qs = qs.filter(cpf__icontains=cpf)
         if telefone:
             qs = qs.filter(telefone__icontains=telefone)
+        if email:
+            qs = qs.filter(email__icontains=email)
         if categoria:
             qs = qs.filter(categoria=categoria)
 

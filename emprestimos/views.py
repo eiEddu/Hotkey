@@ -1,12 +1,16 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.mail import send_mail
 from django.core.paginator import Paginator
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import ListView, CreateView, DeleteView
+
+from pi_hotkey import settings
 from .forms import EmprestimoQuartoForm, EmprestimoSalaComercialForm
 from .models import Emprestimo
 from chaves.models import Chave
@@ -86,6 +90,7 @@ class EmprestimoQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin,Cre
         chave.save()
 
         messages.success(self.request, f"Empréstimo realizado! ENTREGUE A CHAVE: {chave.codigo}")
+        enviar_email_emprestimo(form.instance)
         return super().form_valid(form)
 
 
@@ -131,6 +136,7 @@ class EmprestimoSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMi
         chave_b.save()
 
         messages.success(self.request, f"Empréstimo realizado! ENTREGAR CHAVES: {chave_s.codigo} e {chave_b.codigo}")
+        enviar_email_emprestimo(form.instance)
         return super().form_valid(form)
 
 
@@ -159,3 +165,29 @@ class EmprestimoDevolucaoView(View):
         emprestimo.save()
         messages.success(request, f"Empréstimo {emprestimo.codigo} finalizado e chaves liberadas com sucesso!")
         return redirect('emprestimos')
+
+def enviar_email_emprestimo(emprestimo):
+    dados = {
+        'cliente': emprestimo.cliente.nome,
+        'codigo_emprestimo': emprestimo.codigo,
+        'reserva_codigo': emprestimo.reserva.codigo,
+        'chave_codigo': emprestimo.chave.codigo,
+        'chave_bloco_codigo': emprestimo.chave_bloco.codigo if emprestimo.chave_bloco else None,
+        'data_devolucao': emprestimo.data_devolucao.strftime("%d/%m/%Y às %H:%M")
+    }
+
+    texto_email = render_to_string('emails/texto_email.txt', dados)
+    html_email = render_to_string('emails/texto_email.html', dados)
+
+
+
+    send_mail(
+        subject=f"HOTKEY - Confirmação de Retirada de Chave ({dados['chave_codigo']})",
+        message=texto_email,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[emprestimo.cliente.email],
+        html_message=html_email,
+        fail_silently=False
+    )
+
+    return redirect('emprestimos')

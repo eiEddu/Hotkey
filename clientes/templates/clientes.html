@@ -23,6 +23,11 @@
                 </div>
 
                 <div class="col-md-2 mb-2">
+                    <label class="fw-bold text-dark small">Email:</label>
+                    <input class="form-control border-dark" type="text" name="email" value="{{ request.GET.email }}" placeholder="email">
+                </div>
+
+                <div class="col-md-2 mb-2">
                     <label class="fw-bold text-dark small">Categoria:</label>
                     <select class="form-select border-dark" name="categoria">
                         <option value="">Todas</option>
@@ -53,6 +58,7 @@
                                 <th class="text-gold">Nome</th>
                                 <th class="text-gold">CPF</th>
                                 <th class="text-gold">Telefone</th>
+                                <th class="text-gold">Email</th>
                                 <th class="text-gold">Categoria</th>
                                 <th style="width: 100px; text-align: center" class="text-gold">Ações</th>
                             </tr>
@@ -63,6 +69,7 @@
                                 <td>{{ cliente.nome }}</td>
                                 <td>{{ cliente.cpf }}</td>
                                 <td>{{ cliente.telefone }}</td>
+                                <td>{{ cliente.email }}</td>
                                 <td>{{ cliente.get_categoria_display }}</td>
                                 <td style="text-align: center">
                                     <a href="{% url 'cliente_editar' cliente.pk %}" class="btn btn-sm btn-outline-dark me-1" title="Editar">

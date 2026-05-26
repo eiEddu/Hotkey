@@ -1,0 +1,19 @@
+<h3>Olá <strong>{{cliente}}</strong>!</h3>
+<p>Estamos enviando este e-mail para confirmar a retirada da chave vinculada à sua reserva.</p>
+
+<h3>Dados do Empréstimo:</h3>
+<p><strong>Código do Empréstimo: </strong>{{ codigo_emprestimo }}</p>
+<p><strong>Reserva vinculada: </strong>{{ reserva_codigo }}</p>
+<p><strong>Chave da Sala/Quarto: </strong>{{ chave_codigo }}</p>
+
+{% if chave_bloco_codigo %}
+    <p><strong>Chave do Bloco: </strong>{{ chave_bloco_codigo }}</p>
+{% endif %}
+
+<p><strong>Prazo de Devolução: </strong>{{ data_devolucao }}</p>
+
+<p>Lembramos que as chaves devem ser devolvidas no balcão até o horário estipulado para evitar bloqueios no sistema.</p>
+
+<p><strong>Agradecemos pela preferência! Tenha uma excelente estadia/reunião!</strong></p>
+
+<p style="color: #D4AF37;"><strong>HOTKEY</strong></p>
