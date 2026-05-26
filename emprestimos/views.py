@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.shortcuts import redirect
@@ -18,11 +19,37 @@ class EmprestimoListView(PermissionRequiredMixin,ListView):
     template_name = 'emprestimos.html'
 
     def get_queryset(self):
-        buscar = self.request.GET.get('buscar')
         qs = super(EmprestimoListView, self).get_queryset()
-        if buscar:
-            qs = qs.filter(codigo__icontains=buscar)
-        return qs
+        codigo = self.request.GET.get('codigo')
+        data = self.request.GET.get('data')
+        cliente = self.request.GET.get('cliente')
+        funcionario = self.request.GET.get('funcionario')
+        chave_sala = self.request.GET.get('chave_sala')
+        chave_bloco = self.request.GET.get('chave_bloco')
+        status = self.request.GET.get('status')
+
+        if codigo:
+            qs = qs.filter(codigo__icontains=codigo)
+        if cliente:
+            qs = qs.filter(cliente__nome__icontains=cliente)
+        if funcionario:
+            qs = qs.filter(funcionario__nome__icontains=funcionario)
+        if chave_sala:
+            qs = qs.filter(chave__codigo__icontains=chave_sala)
+        if chave_bloco:
+            qs = qs.filter(chave_bloco__codigo__icontains=chave_bloco)
+        if status:
+            qs = qs.filter(status=status)
+
+        if data:
+            qs = qs.filter(data_inicio__date__lte=data, data_devolucao__date__gte=data)
+
+        if qs.count() > 0:
+            paginator = Paginator(qs, 10)
+            listagem = paginator.get_page(self.request.GET.get('page'))
+            return listagem
+        else:
+            return messages.info(self.request, 'Nenhum empréstimo encontrado com estes filtros!')
 
 
 class EmprestimoQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):

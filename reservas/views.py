@@ -3,9 +3,11 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View
 from .forms import ReservaQuartoForm, ReservaSalaComercialForm
 from .models import Reserva
+from django.shortcuts import redirect
+from django.utils import timezone
 
 class ReservaListView(PermissionRequiredMixin,ListView):
     permission_required = 'reservas.view_reserva'
@@ -14,18 +16,35 @@ class ReservaListView(PermissionRequiredMixin,ListView):
     template_name = 'reservas.html'
 
     def get_queryset(self):
-        buscar = self.request.GET.get('buscar')
+        Reserva.objects.filter(status='ATIVA', data_fim__lt=timezone.now()).update(status='ENCERRADA')
         qs = super(ReservaListView, self).get_queryset()
+        codigo = self.request.GET.get('codigo')
+        data = self.request.GET.get('data')
+        cliente = self.request.GET.get('cliente')
+        sala = self.request.GET.get('sala')
+        funcionario = self.request.GET.get('funcionario')
+        status = self.request.GET.get('status')
 
-        if buscar:
-            qs = qs.filter(codigo__icontains=buscar)
+        if codigo:
+            qs = qs.filter(codigo__icontains=codigo)
+        if cliente:
+            qs = qs.filter(cliente__nome__icontains=cliente)
+        if sala:
+            qs = qs.filter(sala__codigo__icontains=sala)
+        if funcionario:
+            qs = qs.filter(funcionario__nome__icontains=funcionario)
+        if status:
+            qs = qs.filter(status=status)
+
+        if data:
+            qs = qs.filter(data_inicio__date__lte=data, data_fim__date__gte=data)
 
         if qs.count() > 0:
             paginator = Paginator(qs, 10)
             listagem = paginator.get_page(self.request.GET.get('page'))
             return listagem
         else:
-            return messages.info(self.request, 'Não existem reservas!')
+            return messages.info(self.request, 'Nenhuma reserva encontrada com estes filtros!')
 
 class ReservaQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
     permission_required = 'reservas.create_reserva'
@@ -70,3 +89,13 @@ class ReservaDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteView)
     template_name = 'reserva_apagar.html'
     success_url = reverse_lazy('reservas')
     success_message = 'Reserva apagada com sucesso!'
+
+class ReservaEncerrarView(PermissionRequiredMixin, View):
+    permission_required = 'reservas.update_reserva'
+
+    def get(self, request, pk):
+        reserva = Reserva.objects.get(pk=pk)
+        reserva.status = 'ENCERRADA'
+        reserva.save()
+        messages.success(request, f"Reserva {reserva.codigo} encerrada com sucesso!")
+        return redirect('reservas')

@@ -6,13 +6,38 @@
     <div class="container">
         
         <form action="" method="GET">
-            <div class="form-group row p-3 mb-3 bg-white shadow-sm rounded">
-                <label class="col-sm-2 col-form-label fw-bold">Identificador da Chave:</label>
-                <div class="col-sm-8">
-                    <input class="form-control border-dark" type="text" name="buscar" value="{{ request.GET.buscar }}" placeholder="Digite o identificador da chave">
+            <div class="row p-3 mb-3 bg-white shadow-sm rounded align-items-end">
+                <div class="col-md-3 mb-2">
+                    <label class="fw-bold text-dark small">Identificador:</label>
+                    <input class="form-control border-dark" type="text" name="codigo" value="{{ request.GET.codigo }}" placeholder="Ex: AN1BL1CH1">
                 </div>
-                <div class="col-sm-2">
-                    <button type="submit" class="btn btn-dark w-100"><i class="fas fa-search text-gold"></i> Buscar</button>
+
+                <div class="col-md-2 mb-2">
+                    <label class="fw-bold text-dark small">Tipo:</label>
+                    <select class="form-select border-dark" name="tipo">
+                        <option value="">Todos</option>
+                        <option value="BLOCO" {% if request.GET.tipo == 'BLOCO' %}selected{% endif %}>Bloco</option>
+                        <option value="SALA" {% if request.GET.tipo == 'SALA' %}selected{% endif %}>Sala</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 mb-2">
+                    <label class="fw-bold text-dark small">Vinculado a:</label>
+                    <input class="form-control border-dark" type="text" name="vinculo" value="{{ request.GET.vinculo }}" placeholder="Cód do Bloco ou Sala">
+                </div>
+
+                <div class="col-md-2 mb-2">
+                    <label class="fw-bold text-dark small">Status:</label>
+                    <select class="form-select border-dark" name="status">
+                        <option value="">Todos</option>
+                        <option value="DISPONÍVEL" {% if request.GET.status == 'DISPONÍVEL' %}selected{% endif %}>Disponível</option>
+                        <option value="EMPRESTADA" {% if request.GET.status == 'EMPRESTADA' %}selected{% endif %}>Emprestada</option>
+                        <option value="EXTRAVIADA" {% if request.GET.status == 'EXTRAVIADA' %}selected{% endif %}>Extraviada</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 mb-2">
+                    <button type="submit" class="btn btn-dark w-100 fw-bold"><i class="fas fa-filter text-gold"></i> Filtrar</button>
                 </div>
             </div>
         </form>

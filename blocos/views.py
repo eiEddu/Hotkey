@@ -16,18 +16,22 @@ class BlocoListView(PermissionRequiredMixin,ListView):
     template_name = 'blocos.html'
 
     def get_queryset(self):
-        buscar = self.request.GET.get('buscar')
         qs = super(BlocoListView, self).get_queryset()
+        codigo = self.request.GET.get('codigo')
+        andar = self.request.GET.get('andar')
 
-        if buscar:
-            qs = qs.filter(codigo__icontains=buscar)
+        if codigo:
+            qs = qs.filter(codigo__icontains=codigo)
+        if andar:
+            qs = qs.filter(andar=andar)
 
-        if qs.count() >0:
-            paginator = Paginator(qs, 5)
+        if qs.count() > 0:
+            paginator = Paginator(qs, 10)
             listagem = paginator.get_page(self.request.GET.get('page'))
             return listagem
         else:
-            return messages.info(self.request,('Não existem blocos cadastrados!'))
+            return messages.info(self.request, 'Nenhum bloco encontrado com estes filtros!')
+
 
 class BlocoCreateView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
     permission_required = 'blocos.add_bloco'

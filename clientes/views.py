@@ -15,18 +15,27 @@ class ClienteListView(PermissionRequiredMixin,ListView):
     template_name = 'clientes.html'
 
     def get_queryset(self):
-        buscar = self.request.GET.get('buscar')
         qs = super(ClienteListView, self).get_queryset()
+        nome = self.request.GET.get('nome')
+        cpf = self.request.GET.get('cpf')
+        telefone = self.request.GET.get('telefone')
+        categoria = self.request.GET.get('categoria')
 
-        if buscar:
-            qs = qs.filter(nome__icontains=buscar)
+        if nome:
+            qs = qs.filter(nome__icontains=nome)
+        if cpf:
+            qs = qs.filter(cpf__icontains=cpf)
+        if telefone:
+            qs = qs.filter(telefone__icontains=telefone)
+        if categoria:
+            qs = qs.filter(categoria=categoria)
 
         if qs.count() > 0:
-            paginator = Paginator(qs, 5)
+            paginator = Paginator(qs, 10)
             listagem = paginator.get_page(self.request.GET.get('page'))
             return listagem
         else:
-            return messages.info(self.request, 'Não existem clientes cadastrados!')
+            return messages.info(self.request, 'Nenhum cliente encontrado com estes filtros!')
 
 
 class ClienteCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):

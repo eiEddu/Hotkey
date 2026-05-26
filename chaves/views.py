@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .forms import ChaveBlocoModelForm, ChaveQuartoModelForm, ChaveSalaComercialModelForm
 from .models import Chave
+from django.db.models import Q
 
 class ChaveListView(PermissionRequiredMixin,ListView):
     permission_required = 'chaves.view_chave'
@@ -13,20 +14,32 @@ class ChaveListView(PermissionRequiredMixin,ListView):
     model = Chave
     template_name = 'chaves.html'
 
-
     def get_queryset(self):
-        buscar = self.request.GET.get('buscar')
         qs = super(ChaveListView, self).get_queryset()
+        codigo = self.request.GET.get('codigo')
+        tipo = self.request.GET.get('tipo')
+        vinculo = self.request.GET.get('vinculo')
+        status = self.request.GET.get('status')
 
-        if buscar:
-            qs = qs.filter(codigo__icontains=buscar)
+        if codigo:
+            qs = qs.filter(codigo__icontains=codigo)
+        if tipo:
+            qs = qs.filter(tipo=tipo)
+        if status:
+            qs = qs.filter(status=status)
+        if vinculo:
+            qs = qs.filter(
+                Q(bloco__codigo__icontains=vinculo) |
+                Q(sala__codigo__icontains=vinculo)
+            )
 
         if qs.count() > 0:
-            paginator = Paginator(qs, 5)
+            paginator = Paginator(qs, 10)
             listagem = paginator.get_page(self.request.GET.get('page'))
             return listagem
         else:
-            return messages.info(self.request, 'Não existem chaves cadastradas!')
+            return messages.info(self.request, 'Nenhuma chave encontrada com estes filtros!')
+
 
 class ChaveBlocoCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
     permission_required = 'chaves.add_chave'

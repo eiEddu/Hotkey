@@ -4,6 +4,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.db.models import Q
 
 from blocos.models import Bloco
 from .forms import QuartoModelForm, SalaComercialModelForm
@@ -16,17 +17,31 @@ class SalaListView(PermissionRequiredMixin,ListView):
     template_name = 'salas.html'
 
     def get_queryset(self):
-        buscar = self.request.GET.get('buscar')
         qs = super(SalaListView, self).get_queryset()
-        if buscar:
-            qs = qs.filter(codigo__icontains=buscar)
+        codigo = self.request.GET.get('codigo')
+        tipo = self.request.GET.get('tipo')
+        localizacao = self.request.GET.get('localizacao')
+        status = self.request.GET.get('status')
+
+        if codigo:
+            qs = qs.filter(codigo__icontains=codigo)
+        if tipo:
+            qs = qs.filter(tipo=tipo)
+        if status:
+            qs = qs.filter(status=status)
+        if localizacao:
+            qs = qs.filter(
+                Q(bloco__codigo__icontains=localizacao) |
+                Q(andar__icontains=localizacao)
+            )
 
         if qs.count() > 0:
-            paginator = Paginator(qs, 5)
+            paginator = Paginator(qs, 10)
             listagem = paginator.get_page(self.request.GET.get('page'))
             return listagem
         else:
             return messages.info(self.request, 'Não existem salas cadastradas!')
+
 
 class QuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
     permission_required = 'salas.create_sala'

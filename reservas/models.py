@@ -29,16 +29,31 @@ class Reserva(models.Model):
     def clean(self):
         super().clean()
 
-        # Garante que as datas foram preenchidas antes de validar
+        if self.cliente:
+            reservas_ativas = Reserva.objects.filter(
+                cliente=self.cliente,
+                status='ATIVA'
+            ).exclude(pk=self.pk).count()
+
+            limites = {
+                'BRONZE': 1,
+                'PRATA': 2,
+                'OURO': 3
+            }
+            limite_cliente = limites.get(self.cliente.categoria, 1)
+            if reservas_ativas >= limite_cliente:
+                raise ValidationError({
+                    'cliente': f"Bloqueio: Este cliente possui a categoria {self.cliente.get_categoria_display()} e já atingiu o limite de {limite_cliente} reserva(s) ativa(s)."
+                })
+
+
         if self.data_inicio and self.data_fim:
 
-            # Impede que a data de fim seja anterior à de início
             if self.data_inicio >= self.data_fim:
                 raise ValidationError({
                     'data_fim': 'A data de término deve ser posterior à data de início.'
                 })
 
-            # Lógica Anti-Overbooking
             conflitos = Reserva.objects.filter(
                 sala=self.sala,
                 status='ATIVA',
