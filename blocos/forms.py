@@ -8,5 +8,5 @@ class BlocoModelForm(forms.ModelForm):
         model = Bloco
         fields = ['andar','quantidade']
         error_messages = {
-            'codigo':{'required':'O Código do bloco é obrigatório','unique':'O código já foi cadastrado'}
+            'quantidade':{'required':'Insira a quantidade de salas registradas no bloco!',}
         }

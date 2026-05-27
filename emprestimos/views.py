@@ -44,7 +44,6 @@ class EmprestimoListView(PermissionRequiredMixin,ListView):
             qs = qs.filter(chave_bloco__codigo__icontains=chave_bloco)
         if status:
             qs = qs.filter(status=status)
-
         if data:
             qs = qs.filter(data_inicio__date__lte=data, data_devolucao__date__gte=data)
 
