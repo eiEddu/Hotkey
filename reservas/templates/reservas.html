@@ -92,11 +92,11 @@
                                         <i class="fas fa-check-circle"></i>
                                     </a>
                                     {% endif %}
-                                    {% if reserva.sala.tipo == 'QUARTO' %}
+                                    {% if reserva.sala.tipo == 'QUARTO' and reserva.status == 'ATIVA' %}
                                         <a href="{% url 'reserva_quarto_editar' reserva.pk %}" class="btn btn-sm btn-outline-dark me-1" title="Editar">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                    {% else %}
+                                    {% elif reserva.sala.tipo == 'SALA_COMERCIAL' and reserva.status == 'ATIVA' %}
                                         <a href="{% url 'reserva_sala_comercial_editar' reserva.pk %}" class="btn btn-sm btn-outline-dark me-1" title="Editar">
                                             <i class="fas fa-edit"></i>
                                         </a>
