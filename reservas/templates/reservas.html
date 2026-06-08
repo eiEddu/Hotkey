@@ -88,22 +88,27 @@
                                 <td>{{ reserva.get_status_display }}</td>
                                 <td style="text-align: center">
                                     {% if reserva.status == 'ATIVA' %}
-                                    <a href="{% url 'reserva_encerrar' reserva.pk %}" class="btn btn-sm btn-outline-success me-1" title="Encerrar Reserva">
-                                        <i class="fas fa-check-circle"></i>
-                                    </a>
-                                    {% endif %}
-                                    {% if reserva.sala.tipo == 'QUARTO' and reserva.status == 'ATIVA' %}
-                                        <a href="{% url 'reserva_quarto_editar' reserva.pk %}" class="btn btn-sm btn-outline-dark me-1" title="Editar">
-                                            <i class="fas fa-edit"></i>
+                                        <a href="{% url 'reserva_encerrar' reserva.pk %}" class="btn btn-sm btn-outline-success me-1" title="Encerrar Reserva">
+                                            <i class="fas fa-check-circle"></i>
                                         </a>
-                                    {% elif reserva.sala.tipo == 'SALA_COMERCIAL' and reserva.status == 'ATIVA' %}
-                                        <a href="{% url 'reserva_sala_comercial_editar' reserva.pk %}" class="btn btn-sm btn-outline-dark me-1" title="Editar">
-                                            <i class="fas fa-edit"></i>
+
+                                        {% if reserva.sala.tipo == 'QUARTO' %}
+                                            <a href="{% url 'reserva_quarto_editar' reserva.pk %}" class="btn btn-sm btn-outline-dark me-1" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'reserva_sala_comercial_editar' reserva.pk %}" class="btn btn-sm btn-outline-dark me-1" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        {% endif %}
+                                        <a href="{% url 'reserva_cancelar' reserva.pk %}" class="btn btn-sm btn-outline-danger me-1" title="Cancelar">
+                                            <i class="fas fa-times"></i>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'reserva_apagar' reserva.pk %}" class="btn btn-sm btn-outline-danger me-1" title="Excluir">
+                                            <i class="far fa-trash-alt"></i>
                                         </a>
                                     {% endif %}
-                                    <a href="{% url 'reserva_apagar' reserva.pk %}" class="btn btn-sm btn-outline-danger me-1" title="Excluir">
-                                        <i class="far fa-trash-alt"></i>
-                                    </a>
                                 </td>
                             </tr>
                             {% endfor %}

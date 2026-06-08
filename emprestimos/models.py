@@ -7,7 +7,8 @@ import funcionarios.models
 class Emprestimo(models.Model):
     STATUS_CHOICES = [
         ('ATIVO','Ativo'),
-        ('FINALIZADO/DEVOLVIDO','Finalizado/Devolvido')
+        ('FINALIZADO/DEVOLVIDO','Finalizado/Devolvido'),
+        ('ATRASADO','Atrasado'),
     ]
 
     codigo = models.CharField('Codigo', max_length=100, unique=True)

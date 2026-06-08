@@ -99,3 +99,13 @@ class ReservaEncerrarView(PermissionRequiredMixin, View):
         reserva.save()
         messages.success(request, f"Reserva {reserva.codigo} encerrada com sucesso!")
         return redirect('reservas')
+
+class ReservaCancelarView(PermissionRequiredMixin, View):
+    permission_required = 'reservas.update_reserva'
+
+    def get(self, request, pk):
+        reserva = Reserva.objects.get(pk=pk)
+        reserva.status = 'CANCELADA'
+        reserva.save()
+        messages.success(request,f"Reserva {reserva.codigo} cancelada com sucesso!")
+        return redirect('reservas')

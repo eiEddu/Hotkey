@@ -8,7 +8,8 @@ import salas.models
 class Reserva(models.Model):
     STATUS_CHOICES = [
         ('ATIVA', 'Ativa'),
-        ('ENCERRADA', 'Encerrada')
+        ('ENCERRADA', 'Encerrada'),
+        ('CANCELADA', 'Cancelada'),
     ]
     codigo = models.CharField('Codigo', max_length=100, unique=True, help_text='Codigo da reserva')
     data_inicio = models.DateTimeField('Data de início', help_text='Data de início da reserva')

@@ -9,12 +9,12 @@ from django.utils import timezone
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import ListView, CreateView, DeleteView
-
+from .jobs import scheduler, job_alerta_atraso_especifico
 from pi_hotkey import settings
 from .forms import EmprestimoQuartoForm, EmprestimoSalaComercialForm
 from .models import Emprestimo
 from chaves.models import Chave
-
+from datetime import timedelta
 
 class EmprestimoListView(PermissionRequiredMixin,ListView):
     permission_required = 'emprestimos.view_emprestimo'
@@ -90,7 +90,21 @@ class EmprestimoQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin,Cre
 
         messages.success(self.request, f"Empréstimo realizado! ENTREGUE A CHAVE: {chave.codigo}")
         enviar_email_emprestimo(form.instance)
-        return super().form_valid(form)
+        resultado = super().form_valid(form)
+
+        data_alerta = self.object.data_devolucao + timedelta(minutes=1)
+
+        scheduler.add_job(
+            job_alerta_atraso_especifico,
+            trigger='date',
+            run_date=data_alerta,
+            args=[self.object.id],
+            id=f"alerta_emprestimo_{self.object.id}",
+            replace_existing=True
+        )
+        print(f"Alerta de atraso configurado para: {data_alerta.strftime('%d/%m/%Y %H:%M:%S')}")
+
+        return resultado
 
 
 class EmprestimoSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
@@ -128,15 +142,25 @@ class EmprestimoSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMi
         form.instance.chave_bloco = chave_b
         form.instance.data_inicio = timezone.now()
         form.instance.data_devolucao = reserva.data_fim
-
         chave_s.status = 'EMPRESTADA'
         chave_s.save()
         chave_b.status = 'EMPRESTADA'
         chave_b.save()
-
         messages.success(self.request, f"Empréstimo realizado! ENTREGAR CHAVES: {chave_s.codigo} e {chave_b.codigo}")
         enviar_email_emprestimo(form.instance)
-        return super().form_valid(form)
+
+        resultado = super().form_valid(form)
+        data_alerta = self.object.data_devolucao + timedelta(minutes=1)
+        scheduler.add_job(
+            job_alerta_atraso_especifico,
+            trigger='date',
+            run_date=data_alerta,
+            args=[self.object.id],
+            id=f"alerta_emprestimo_{self.object.id}",
+            replace_existing=True
+        )
+        print(f"Alerta de atraso configurado para: {data_alerta.strftime('%d/%m/%Y %H:%M:%S')}")
+        return resultado
 
 
 class EmprestimoDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
