@@ -1,0 +1,15 @@
+ALERTA CRÍTICO: Chaves Retidas
+
+Administrador,
+
+O empréstimo {{ codigo_emprestimo }} vinculado à reserva {{ reserva_codigo }} ultrapassou o limite de 24h após o encerramento.
+
+Chaves não devolvidas:
+Chave da Sala/Quarto: {{ chave_codigo }}
+{% if chave_bloco_codigo %}
+Chave do Bloco: {{ chave_bloco_codigo }}
+{% endif %}
+
+O status no sistema foi alterado para 'Ativo/Notificado'.
+
+HOTKEY - Sistema de Alertas Automático

@@ -1,18 +1,15 @@
-# emprestimos/jobs.py
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.conf import settings
 from .models import Emprestimo
 
-# 1. Inicializa o agendador e exporta a variável para ser usada nas views
+
 scheduler = BackgroundScheduler()
 scheduler.start()
 
-
-# 2. A função do Job
 def job_alerta_atraso_especifico(emprestimo_id):
-
-
     try:
         emp = Emprestimo.objects.get(pk=emprestimo_id)
 
@@ -20,24 +17,25 @@ def job_alerta_atraso_especifico(emprestimo_id):
             emp.status = 'NOTIFICADO'
             emp.save()
 
-            chaves_texto = f"{emp.chave.codigo}"
-            if emp.chave_bloco:
-                chaves_texto += f" e {emp.chave_bloco.codigo}"
+            # Prepara os dados para mandar para os arquivos HTML e TXT
+            dados = {
+                'codigo_emprestimo': emp.codigo,
+                'reserva_codigo': emp.reserva.codigo,
+                'chave_codigo': emp.chave.codigo,
+                'chave_bloco_codigo': emp.chave_bloco.codigo if emp.chave_bloco else None,
+            }
+
+            texto_email = render_to_string('emails/alerta_atraso.txt', dados)
+            html_email = render_to_string('emails/alerta_atraso.html', dados)
 
             assunto = f"ALERTA CRÍTICO: Chaves retidas - Empréstimo {emp.codigo}"
-            mensagem = (
-                f"Administrador,\n\n"
-                f"O empréstimo {emp.codigo} vinculado à reserva {emp.reserva.codigo} "
-                f"ultrapassou o limite de 24h após o encerramento.\n\n"
-                f"As chaves {chaves_texto} constam como NÃO DEVOLVIDAS.\n"
-                f"O status no sistema foi alterado para 'Ativo/Notificado'."
-            )
 
             send_mail(
                 subject=assunto,
-                message=mensagem,
+                message=texto_email,
                 from_email=settings.EMAIL_HOST_USER,
                 recipient_list=['corporativo.amaral@gmail.com'],
+                html_message=html_email,
                 fail_silently=True
             )
             print(f"Job executado: Status do empréstimo {emp.codigo} alterado para NOTIFICADO e e-mail enviado.")

@@ -1,0 +1,16 @@
+<h3 style="color: #dc3545;">ALERTA CRÍTICO: Chaves Retidas</h3>
+<p>Administrador,</p>
+
+<p>O empréstimo <strong>{{ codigo_emprestimo }}</strong> vinculado à reserva <strong>{{ reserva_codigo }}</strong> ultrapassou o limite de 24h após o encerramento.</p>
+
+<h3>Chaves não devolvidas:</h3>
+<p><strong>Chave da Sala/Quarto: </strong>{{ chave_codigo }}</p>
+
+{% if chave_bloco_codigo %}
+    <p><strong>Chave do Bloco: </strong>{{ chave_bloco_codigo }}</p>
+{% endif %}
+
+<br>
+<p>O status no sistema foi alterado para <strong>'Ativo/Notificado'</strong>.</p>
+
+<p style="color: #D4AF37;"><strong>HOTKEY - Sistema de Alertas Automático</strong></p>
