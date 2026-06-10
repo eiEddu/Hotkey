@@ -6,7 +6,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .forms import ChaveBlocoModelForm, ChaveQuartoModelForm, ChaveSalaComercialModelForm
 from .models import Chave
-from django.db.models import Q
+from django.db.models import Q, ProtectedError
+
 
 class ChaveListView(PermissionRequiredMixin,ListView):
     permission_required = 'chaves.view_chave'
@@ -15,6 +16,10 @@ class ChaveListView(PermissionRequiredMixin,ListView):
     template_name = 'chaves.html'
 
     def get_queryset(self):
+
+        #######################################
+        ########## FILTROS DE BUSCA ###########
+        #######################################
         qs = super(ChaveListView, self).get_queryset()
         codigo = self.request.GET.get('codigo')
         tipo = self.request.GET.get('tipo')
@@ -50,6 +55,9 @@ class ChaveBlocoCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateVi
     success_url = reverse_lazy('chaves')
     success_message = 'Chave de Bloco cadastrada com sucesso!'
 
+    ###################################################
+    ########## CRIAÇÃO AUTOMÁTICA DE CÓDIGO ###########
+    ###################################################
     def form_valid(self, form):
         form.instance.tipo = 'BLOCO'
         self.object = form.save()
@@ -66,6 +74,9 @@ class ChaveQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateV
     success_url = reverse_lazy('chaves')
     success_message = 'Chave de Quarto cadastrada com sucesso!'
 
+    ###################################################
+    ########## CRIAÇÃO AUTOMÁTICA DE CÓDIGO ###########
+    ###################################################
     def form_valid(self, form):
         form.instance.tipo = 'SALA'
         self.object = form.save()
@@ -82,6 +93,9 @@ class ChaveSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin, 
     success_url = reverse_lazy('chaves')
     success_message = 'Chave de Sala Comercial cadastrada com sucesso!'
 
+    ###################################################
+    ########## CRIAÇÃO AUTOMÁTICA DE CÓDIGO ###########
+    ###################################################
     def form_valid(self, form):
         form.instance.tipo = 'SALA'
         self.object = form.save()
@@ -124,3 +138,14 @@ class ChaveDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteView):
     template_name = 'chave_apagar.html'
     success_url = reverse_lazy('chaves')
     success_message = 'Chave apagada com sucesso!'
+
+    ##########################################################
+    ########## ALTERAR MENSAGEM DE ERRO NA EXCLUSÃO ##########
+    ##########################################################
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        try:
+            return super().post(request,*args,**kwargs)
+        except ProtectedError:
+            messages.error(request,f'A chave {self.object} não pode ser excluída. 'f'Esta chave está vinculada a um bloco/sala!')

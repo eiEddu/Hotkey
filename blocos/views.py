@@ -18,6 +18,10 @@ class BlocoListView(PermissionRequiredMixin,ListView):
 
 
     def get_queryset(self):
+
+        #######################################
+        ########## FILTROS DE BUSCA ###########
+        #######################################
         qs = super(BlocoListView, self).get_queryset()
         codigo = self.request.GET.get('codigo')
         andar = self.request.GET.get('andar')
@@ -44,16 +48,15 @@ class BlocoCreateView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
     success_url = reverse_lazy('blocos')
     success_message = 'Bloco cadastrado com sucesso!'
 
-    ################################
-    # CRIAÇÃO AUTOMÁTICA DE CÓDIGO #
-    ################################
+    ###################################################
+    ########## CRIAÇÃO AUTOMÁTICA DE CÓDIGO ###########
+    ###################################################
     def form_valid(self, form):
         response = super().form_valid(form)
         codigo = "AN"+form.cleaned_data['andar']+"BL"+str(self.object.pk)
         self.object.codigo = codigo
         self.object.save()
         return response
-    ################################
 
 class BlocoUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
     permission_required = 'blocos.update_bloco'
@@ -72,9 +75,9 @@ class BlocoDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
     success_url = reverse_lazy('blocos')
     success_message = 'Bloco apagado com sucesso!'
 
-    ########################################
-    # ALTERAR MENSAGEM DE ERRO NA EXCLUSÃO #
-    ########################################
+    ##########################################################
+    ########## ALTERAR MENSAGEM DE ERRO NA EXCLUSÃO ##########
+    ##########################################################
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
@@ -82,4 +85,3 @@ class BlocoDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
             return super().post(request,*args,**kwargs)
         except ProtectedError:
             messages.error(request,f'O bloco {self.object} não pode ser excluído. 'f'Este bloco possui salas e/ou chaves registradas!')
-    ########################################

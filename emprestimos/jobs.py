@@ -14,7 +14,7 @@ def job_alerta_atraso_especifico(emprestimo_id):
         emp = Emprestimo.objects.get(pk=emprestimo_id)
 
         if emp.status == 'ATIVO':
-            emp.status = 'NOTIFICADO'
+            emp.status = 'ATRASADO'
             emp.save()
 
             # Prepara os dados para mandar para os arquivos HTML e TXT
@@ -38,6 +38,6 @@ def job_alerta_atraso_especifico(emprestimo_id):
                 html_message=html_email,
                 fail_silently=True
             )
-            print(f"Job executado: Status do empréstimo {emp.codigo} alterado para NOTIFICADO e e-mail enviado.")
+            print(f"Job executado: Status do empréstimo {emp.codigo} alterado para ATRASADO e e-mail enviado.")
     except Exception as e:
         print(f"Erro ao executar job de atraso: {e}")

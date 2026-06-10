@@ -13,6 +13,11 @@ class EmprestimoQuartoForm(forms.ModelForm):
     class Meta:
         model = Emprestimo
         fields = ['codigo', 'cliente', 'funcionario', 'reserva']
+        error_messages = {
+            'cliente': {'required':'Selecione um cliente'},
+            'funcionario': {'required':'Selecione um funcionario'},
+            'reserva': {'required':'Selecione uma reserva'}
+        }
 
 class EmprestimoSalaComercialForm(forms.ModelForm):
     cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(), label="Cliente")
@@ -24,3 +29,8 @@ class EmprestimoSalaComercialForm(forms.ModelForm):
     class Meta:
         model = Emprestimo
         fields = ['codigo', 'cliente', 'funcionario', 'reserva']
+        error_messages = {
+            'cliente': {'required':'Selecione um cliente'},
+            'funcionario': {'required':'Selecione um funcionario'},
+            'reserva': {'required':'Selecione uma reserva'}
+        }

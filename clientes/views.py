@@ -14,6 +14,9 @@ class ClienteListView(PermissionRequiredMixin,ListView):
     model = Cliente
     template_name = 'clientes.html'
 
+    #######################################
+    ########## FILTROS DE BUSCA ###########
+    #######################################
     def get_queryset(self):
         qs = super(ClienteListView, self).get_queryset()
         nome = self.request.GET.get('nome')

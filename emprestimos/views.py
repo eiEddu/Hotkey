@@ -23,6 +23,8 @@ class EmprestimoListView(PermissionRequiredMixin,ListView):
     template_name = 'emprestimos.html'
 
     def get_queryset(self):
+
+        ##################### FILTROS DE BUSCA #####################
         qs = super(EmprestimoListView, self).get_queryset()
         codigo = self.request.GET.get('codigo')
         data = self.request.GET.get('data')
@@ -67,6 +69,9 @@ class EmprestimoQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin,Cre
         reserva = form.cleaned_data['reserva']
         cliente = form.cleaned_data['cliente']
 
+        ############################################
+        ###### VERIFICAÇÃO DE CHAVES EM ATRASO #####
+        ############################################
         tem_atraso = Emprestimo.objects.filter(
             cliente=cliente, status='ATIVO', data_devolucao__lt=timezone.now()
         ).exists()
@@ -74,12 +79,18 @@ class EmprestimoQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin,Cre
             messages.error(self.request, "BLOQUEIO: O cliente possui chaves com entrega em atraso!")
             return self.form_invalid(form)
 
+        ####################################################
+        ######## VERIFICAÇÃO DE 1a CHAVE DISPONÍVEL ########
+        ####################################################
         chave = Chave.objects.filter(sala=reserva.sala, status='DISPONÍVEL').first()
 
         if not chave:
             messages.error(self.request, f"ERRO: Não há chaves disponíveis para a sala {reserva.sala.codigo}")
             return self.form_invalid(form)
 
+        ##########################################################
+        ######## BUSCA AUTOMÁTICA PARA OS CHOICES NO FORM ########
+        ##########################################################
         form.instance.cliente = form.cleaned_data['cliente']
         form.instance.chave = chave
         form.instance.data_inicio = timezone.now()
@@ -87,13 +98,14 @@ class EmprestimoQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin,Cre
 
         chave.status = 'EMPRESTADA'
         chave.save()
-
         messages.success(self.request, f"Empréstimo realizado! ENTREGUE A CHAVE: {chave.codigo}")
         enviar_email_emprestimo(form.instance)
+
+        ###############################################################
+        ######## JOB PARA AVISO DE CHAVES NÃO DEVOLVIDAS (24H) ########
+        ###############################################################
         resultado = super().form_valid(form)
-
         data_alerta = self.object.data_devolucao + timedelta(minutes=1)
-
         scheduler.add_job(
             job_alerta_atraso_especifico,
             trigger='date',
@@ -102,8 +114,7 @@ class EmprestimoQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin,Cre
             id=f"alerta_emprestimo_{self.object.id}",
             replace_existing=True
         )
-        print(f"Alerta de atraso configurado para: {data_alerta.strftime('%d/%m/%Y %H:%M:%S')}")
-
+        print(f"Alerta de atraso configurado para: {data_alerta.strftime('%d/%m/%Y %H:%M:%S')}") #Debug no Terminal
         return resultado
 
 
@@ -119,6 +130,9 @@ class EmprestimoSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMi
         reserva = form.cleaned_data['reserva']
         cliente = form.cleaned_data['cliente']
 
+        ############################################
+        ###### VERIFICAÇÃO DE CHAVES EM ATRASO #####
+        ############################################
         tem_atraso = Emprestimo.objects.filter(
             cliente=cliente, status='ATIVO', data_devolucao__lt=timezone.now()
         ).exists()
@@ -126,17 +140,26 @@ class EmprestimoSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMi
             messages.error(self.request, "BLOQUEIO: O cliente possui chaves com entrega em atraso!")
             return self.form_invalid(form)
 
+        #############################################
+        ####### CONTADOR PARA CHAVES DE BLOCO #######
+        #############################################
         chaves_bloco_disponiveis = Chave.objects.filter(bloco=reserva.sala.bloco, status='DISPONÍVEL').count()
         if chaves_bloco_disponiveis <= 1:
             messages.error(self.request, "BLOQUEIO: Apenas a cópia de emergência do bloco está disponível no estoque!")
             return self.form_invalid(form)
+
+        ####################################################
+        ######## VERIFICAÇÃO DE 1a CHAVE DISPONÍVEL ########
+        ####################################################
         chave_s = Chave.objects.filter(sala=reserva.sala, status='DISPONÍVEL').first()
         chave_b = Chave.objects.filter(bloco=reserva.sala.bloco, status='DISPONÍVEL').first()
-
         if not chave_s or not chave_b:
             messages.error(self.request, "ERRO: Chave da sala ou do bloco indisponível!")
             return self.form_invalid(form)
 
+        ##########################################################
+        ######## BUSCA AUTOMÁTICA PARA OS CHOICES NO FORM ########
+        ##########################################################
         form.instance.cliente = form.cleaned_data['cliente']
         form.instance.chave = chave_s
         form.instance.chave_bloco = chave_b
@@ -149,6 +172,9 @@ class EmprestimoSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMi
         messages.success(self.request, f"Empréstimo realizado! ENTREGAR CHAVES: {chave_s.codigo} e {chave_b.codigo}")
         enviar_email_emprestimo(form.instance)
 
+        ###############################################################
+        ######## JOB PARA AVISO DE CHAVES NÃO DEVOLVIDAS (24H) ########
+        ###############################################################
         resultado = super().form_valid(form)
         data_alerta = self.object.data_devolucao + timedelta(minutes=1)
         scheduler.add_job(
@@ -173,11 +199,13 @@ class EmprestimoDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteVie
         return super().delete(request, *args, **kwargs)
 
 
+############################################################
+########## ALTERAR STATUS DAS CHAVES NA DEVOLUÇÃO ##########
+############################################################
 class EmprestimoDevolucaoView(View):
     def get(self, request, pk):
         emprestimo = Emprestimo.objects.get(pk=pk)
         emprestimo.status = 'FINALIZADO/DEVOLVIDO'
-
         emprestimo.chave.status = 'DISPONÍVEL'
         emprestimo.chave.save()
 
@@ -189,6 +217,10 @@ class EmprestimoDevolucaoView(View):
         messages.success(request, f"Empréstimo {emprestimo.codigo} finalizado e chaves liberadas com sucesso!")
         return redirect('emprestimos')
 
+
+#############################################################
+########## CONFIGS DO ENVIO DE EMAIL NO EMPRESTIMO ##########
+#############################################################
 def enviar_email_emprestimo(emprestimo):
     dados = {
         'cliente': emprestimo.cliente.nome,
@@ -198,12 +230,8 @@ def enviar_email_emprestimo(emprestimo):
         'chave_bloco_codigo': emprestimo.chave_bloco.codigo if emprestimo.chave_bloco else None,
         'data_devolucao': emprestimo.data_devolucao.strftime("%d/%m/%Y às %H:%M")
     }
-
     texto_email = render_to_string('emails/texto_email.txt', dados)
     html_email = render_to_string('emails/texto_email.html', dados)
-
-
-
     send_mail(
         subject=f"HOTKEY - Confirmação de Retirada de Chave ({dados['chave_codigo']})",
         message=texto_email,
@@ -212,5 +240,4 @@ def enviar_email_emprestimo(emprestimo):
         html_message=html_email,
         fail_silently=False
     )
-
     return redirect('emprestimos')

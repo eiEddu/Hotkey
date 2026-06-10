@@ -12,7 +12,7 @@
                 <i class="fas fa-info-circle"></i> Selecione o cliente e a reserva. O sistema buscará a primeira chave disponível e definirá as datas automaticamente.
             </div>
 
-            <form method="POST">
+            <form method="POST" novalidate>
                 {% csrf_token %}
                 {% bootstrap_form form %}
 
