@@ -25,14 +25,17 @@ class BlocoListView(PermissionRequiredMixin,ListView):
         qs = super(BlocoListView, self).get_queryset()
         codigo = self.request.GET.get('codigo')
         andar = self.request.GET.get('andar')
+        nome = self.request.GET.get('nome')
 
         if codigo:
             qs = qs.filter(codigo__icontains=codigo)
         if andar:
             qs = qs.filter(andar=andar)
+        if nome:
+            qs = qs.filter(nome__icontains=nome)
 
         if qs.count() > 0:
-            paginator = Paginator(qs, 1)
+            paginator = Paginator(qs, 10)
             listagem = paginator.get_page(self.request.GET.get('page'))
             return listagem
         else:

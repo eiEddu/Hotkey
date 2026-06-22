@@ -12,7 +12,7 @@
             <p class="p-2 mt-2"><strong>Identificador: </strong>{{ object.codigo }}</p>
             <p class="p-2 mt-2"><strong>Tipo: </strong>{{ object.tipo }}</p>
             <hr>
-            <p class="p-2 mt-2 text-danger fw-bold">Confirmar a exclusão da Sala: <strong>{{ object.codigo }}</strong>?</p>
+            <p class="p-2 mt-2 text-danger fw-bold">Confirmar a exclusão da Sala: <strong>{{ object.nome }}</strong>?</p>
             
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}

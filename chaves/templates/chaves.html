@@ -23,7 +23,7 @@
 
                 <div class="col-md-3 mb-2">
                     <label class="fw-bold text-dark small">Vinculado a:</label>
-                    <input class="form-control border-dark" type="text" name="vinculo" value="{{ request.GET.vinculo }}" placeholder="Cód do Bloco ou Sala">
+                    <input class="form-control border-dark" type="text" name="vinculo" value="{{ request.GET.vinculo }}" placeholder="Cód/nome do Bloco ou Sala">
                 </div>
 
                 <div class="col-md-2 mb-2">
@@ -78,9 +78,9 @@
                                 <td>{{ chave.get_tipo_display }}</td>
                                 <td>
                                     {% if chave.bloco %}
-                                        Bloco: {{ chave.bloco.codigo }}
+                                        {{ chave.bloco.nome }}
                                     {% elif chave.sala %}
-                                        Sala: {{ chave.sala.codigo }}
+                                        {{ chave.sala.nome }}
                                     {% else %}
                                         <span class="text-muted">---</span>
                                     {% endif %}

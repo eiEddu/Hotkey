@@ -28,12 +28,12 @@
                 </div>
 
                 <div class="col-md-3 mb-2">
-                    <label class="fw-bold text-dark small">Chave da Sala:</label>
+                    <label class="fw-bold text-dark small">Cód da Chave / Nome da Sala:</label>
                     <input class="form-control border-dark" type="text" name="chave_sala" value="{{ request.GET.chave_sala }}" placeholder="Ex: QU101CH2">
                 </div>
 
                 <div class="col-md-3 mb-2">
-                    <label class="fw-bold text-dark small">Chave do Bloco:</label>
+                    <label class="fw-bold text-dark small">Cód da Chave / Nome do Bloco:</label>
                     <input class="form-control border-dark" type="text" name="chave_bloco" value="{{ request.GET.chave_bloco }}" placeholder="Ex: AN1BL1CH3">
                 </div>
 
@@ -90,8 +90,8 @@
                                 <td>{{ emprestimo.funcionario.nome }}</td>
                                 <td>{{ emprestimo.data_inicio|date:"d/m/Y H:i" }}</td>
                                 <td>{{ emprestimo.data_devolucao|date:"d/m/Y H:i" }}</td>
-                                <td>{{ emprestimo.chave.codigo }}</td>
-                                <td>{{ emprestimo.chave_bloco.codigo|default:"---" }}</td>
+                                <td>{{ emprestimo.chave.codigo }} - {{ emprestimo.chave.nome }}</td>
+                                <td>{{ emprestimo.chave_bloco.nome|default:"---" }}</td>
                                 <td>{{ emprestimo.get_status_display }}</td>
                                 <td style="text-align: center">
                                     {% if emprestimo.status == 'ATIVO' %}

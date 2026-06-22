@@ -35,7 +35,9 @@ class ChaveListView(PermissionRequiredMixin,ListView):
         if vinculo:
             qs = qs.filter(
                 Q(bloco__codigo__icontains=vinculo) |
-                Q(sala__codigo__icontains=vinculo)
+                Q(sala__codigo__icontains=vinculo) |
+                Q(bloco__nome__icontains=vinculo) |
+                Q(sala__nome__icontains=vinculo)
             )
 
         if qs.count() > 0:

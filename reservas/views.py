@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View
 from .forms import ReservaQuartoForm, ReservaSalaComercialForm
@@ -30,7 +31,10 @@ class ReservaListView(PermissionRequiredMixin,ListView):
         if cliente:
             qs = qs.filter(cliente__nome__icontains=cliente)
         if sala:
-            qs = qs.filter(sala__codigo__icontains=sala)
+            qs = qs.filter(
+                Q(sala__codigo__icontains=sala) |
+                Q(sala__nome__icontains=sala)
+            )
         if funcionario:
             qs = qs.filter(funcionario__nome__icontains=funcionario)
         if status:

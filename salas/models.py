@@ -25,6 +25,7 @@ class Sala(models.Model):
     ]
 
     codigo = models.CharField('Codigo', max_length=100,help_text='Identificador da sala')
+    nome = models.CharField('Nome', max_length=100,help_text='Nome da sala')
     tipo = models.CharField('Tipo', max_length=50, choices=TIPO_CHOICES, default='QUARTO')
     status = models.CharField('Status',max_length=50,choices=STATUS_CHOICES,help_text='Status da sala',default='DISPONÍVEL')
     andar = models.CharField('Andar',max_length=50,choices=ANDAR_CHOICES,null=True, blank=True)
@@ -39,4 +40,4 @@ class Sala(models.Model):
         return self.chave_set.filter(status='DISPONÍVEL').count()
 
     def __str__(self):
-        return f"{self.codigo}"
+        return f"{self.codigo} - {self.nome}"

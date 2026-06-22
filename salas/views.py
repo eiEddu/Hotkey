@@ -22,9 +22,12 @@ class SalaListView(PermissionRequiredMixin,ListView):
         tipo = self.request.GET.get('tipo')
         localizacao = self.request.GET.get('localizacao')
         status = self.request.GET.get('status')
+        nome = self.request.GET.get('nome')
 
         if codigo:
             qs = qs.filter(codigo__icontains=codigo)
+        if nome:
+            qs = qs.filter(nome__icontains=nome)
         if tipo:
             qs = qs.filter(tipo=tipo)
         if status:
@@ -74,7 +77,10 @@ class SalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin, Creat
     def form_valid(self, form):
         form.instance.tipo = 'SALA COMERCIAL' # Define o tipo
         self.object = form.save()
-        codigo = form.cleaned_data['bloco'].codigo + "SA" + str(self.object.pk)
+        if self.object.pk < 10:
+            codigo = "SA" + form.cleaned_data['andar'] + "0" + str(self.object.pk)
+        else:
+            codigo = "SA" + form.cleaned_data['andar'] + str(self.object.pk)
         self.object.codigo = codigo
         return super().form_valid(form)
 

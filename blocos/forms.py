@@ -6,7 +6,8 @@ from .models import Bloco
 class BlocoModelForm(forms.ModelForm):
     class Meta:
         model = Bloco
-        fields = ['andar','quantidade']
+        fields = ['nome','andar','quantidade']
         error_messages = {
-            'quantidade':{'required':'Insira a quantidade de salas registradas no bloco!',}
+            'quantidade':{'required':'Insira a quantidade de salas registradas no bloco!'},
+            'nome':{'required':'Insira o nome do bloco!'},
         }

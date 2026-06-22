@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -41,9 +42,15 @@ class EmprestimoListView(PermissionRequiredMixin,ListView):
         if funcionario:
             qs = qs.filter(funcionario__nome__icontains=funcionario)
         if chave_sala:
-            qs = qs.filter(chave__codigo__icontains=chave_sala)
+            qs = qs.filter(
+                Q(chave__codigo__icontains=chave_sala) |
+                Q(chave__nome__icontains=chave_sala)
+            )
         if chave_bloco:
-            qs = qs.filter(chave_bloco__codigo__icontains=chave_bloco)
+            qs = qs.filter(
+                Q(chave_bloco__codigo__icontains=chave_bloco) |
+                Q(chave_bloco__nome__icontains=chave_bloco)
+            )
         if status:
             qs = qs.filter(status=status)
         if data:
@@ -190,6 +197,8 @@ class EmprestimoSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMi
 
 
 class EmprestimoDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
+    permission_required = 'emprestimos.delete_emprestimo'
+    permission_denied_message = 'Deletar empréstimo'
     model = Emprestimo
     template_name = 'emprestimo_apagar.html'
     success_url = reverse_lazy('emprestimos')

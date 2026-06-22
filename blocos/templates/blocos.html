@@ -11,6 +11,10 @@
                     <label class="fw-bold text-dark small">Identificador do Bloco:</label>
                     <input class="form-control border-dark" type="text" name="codigo" value="{{ request.GET.codigo }}" placeholder="Ex: AN1BL1">
                 </div>
+                <div class="col-md-5 mb-2">
+                    <label class="fw-bold text-dark small">Nome do Bloco:</label>
+                    <input class="form-control border-dark" type="text" name="nome" value="{{ request.GET.nome }}" placeholder="Ex: Bloco 3A">
+                </div>
 
                 <div class="col-md-5 mb-2">
                     <label class="fw-bold text-dark small">Andar:</label>
@@ -46,6 +50,7 @@
                         <thead class="table-dark">
                             <tr>
                                 <th class="text-gold">Identificador</th>
+                                <th class="text-gold">nome</th>
                                 <th class="text-gold">Andar</th>
                                 <th class="text-gold">Quantidade de Salas</th>
                                 <th style="width: 100px; text-align: center" class="text-gold">Ações</th>
@@ -55,6 +60,7 @@
                             {% for bloco in object_list %}
                             <tr>
                                 <td>{{ bloco.codigo }}</td>
+                                <td>{{ bloco.nome }}</td>
                                 <td>{{ bloco.get_andar_display }}</td>
                                 <td>{{ bloco.quantidade }}</td>
                                 <td style="text-align: center">

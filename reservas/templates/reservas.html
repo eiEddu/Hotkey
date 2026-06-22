@@ -24,7 +24,7 @@
 
                 <div class="col-md-3 mb-2">
                     <label class="fw-bold text-dark small">Sala/Quarto:</label>
-                    <input class="form-control border-dark" type="text" name="sala" value="{{ request.GET.sala }}" placeholder="Cód da sala">
+                    <input class="form-control border-dark" type="text" name="sala" value="{{ request.GET.sala }}" placeholder="Cód/nome da sala">
                 </div>
 
                 <div class="col-md-4 mb-2">
@@ -83,7 +83,7 @@
                                 <td>{{ reserva.data_inicio }}</td>
                                 <td>{{ reserva.data_fim }}</td>
                                 <td>{{ reserva.cliente.nome }}</td>
-                                <td>{{ reserva.sala.codigo }} ({{ reserva.sala.get_tipo_display }})</td>
+                                <td>{{ reserva.sala.codigo }} - {{ reserva.sala.nome }}</td>
                                 <td>{{ reserva.funcionario.nome }}</td>
                                 <td>{{ reserva.get_status_display }}</td>
                                 <td style="text-align: center">
