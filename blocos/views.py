@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.db.models import ProtectedError
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -88,3 +89,4 @@ class BlocoDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
             return super().post(request,*args,**kwargs)
         except ProtectedError:
             messages.error(request,f'O bloco {self.object} não pode ser excluído. 'f'Este bloco possui salas e/ou chaves registradas!')
+            return redirect('blocos')

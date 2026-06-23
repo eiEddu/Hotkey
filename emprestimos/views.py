@@ -108,10 +108,12 @@ class EmprestimoQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin,Cre
         messages.success(self.request, f"Empréstimo realizado! ENTREGUE A CHAVE: {chave.codigo}")
         enviar_email_emprestimo(form.instance)
 
-        ###############################################################
-        ######## JOB PARA AVISO DE CHAVES NÃO DEVOLVIDAS (24H) ########
-        ###############################################################
+        ###################################################################################
+        ######## JOB PARA AVISO DE CHAVES NÃO DEVOLVIDAS (24H) E GERAÇÃO DE CÓDIGO ########
+        ###################################################################################
         resultado = super().form_valid(form)
+        self.object.codigo = f"EMP{self.object.pk}"
+        self.object.save()
         data_alerta = self.object.data_devolucao + timedelta(minutes=1)
         scheduler.add_job(
             job_alerta_atraso_especifico,
@@ -179,10 +181,12 @@ class EmprestimoSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMi
         messages.success(self.request, f"Empréstimo realizado! ENTREGAR CHAVES: {chave_s.codigo} e {chave_b.codigo}")
         enviar_email_emprestimo(form.instance)
 
-        ###############################################################
-        ######## JOB PARA AVISO DE CHAVES NÃO DEVOLVIDAS (24H) ########
-        ###############################################################
+        ###################################################################################
+        ######## JOB PARA AVISO DE CHAVES NÃO DEVOLVIDAS (24H) E GERAÇÃO DE CÓDIGO ########
+        ###################################################################################
         resultado = super().form_valid(form)
+        self.object.codigo = f"EMP{self.object.pk}"
+        self.object.save()
         data_alerta = self.object.data_devolucao + timedelta(minutes=1)
         scheduler.add_job(
             job_alerta_atraso_especifico,

@@ -16,19 +16,24 @@ class FuncionarioListView(PermissionRequiredMixin,ListView):
     template_name = 'funcionarios.html'
 
     def get_queryset(self):
-        buscar = self.request.GET.get('buscar')
         qs = super(FuncionarioListView, self).get_queryset()
+        nome = self.request.GET.get('nome')
+        cpf = self.request.GET.get('cpf')
+        cargo = self.request.GET.get('cargo')
 
-        if buscar:
-            qs = qs.filter(nome__icontains=buscar)
+        if nome:
+            qs = qs.filter(nome__icontains=nome)
+        if cpf:
+            qs = qs.filter(cpf__icontains=cpf)
+        if cargo:
+            qs = qs.filter(cargo=cargo)
 
         if qs.count() > 0:
             paginator = Paginator(qs, 10)
             listagem = paginator.get_page(self.request.GET.get('page'))
             return listagem
-
         else:
-            return messages.info(self.request,'Não existem funcionários cadastrados!')
+            return messages.info(self.request, 'Nenhum funcionário encontrado com estes filtros!')
 
 class FuncionarioCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
     permission_required = 'funcionarios.add_funcionario'

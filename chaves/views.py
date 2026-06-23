@@ -62,10 +62,10 @@ class ChaveBlocoCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateVi
     ###################################################
     def form_valid(self, form):
         form.instance.tipo = 'BLOCO'
-        self.object = form.save()
-        codigo = form.cleaned_data['bloco'].codigo + "CH" + str(self.object.pk)
-        self.object.codigo = codigo
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        self.object.codigo = form.cleaned_data['bloco'].codigo + "CH" + str(self.object.pk)
+        self.object.save()
+        return response
 
 class ChaveQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
     permission_required = 'chaves.add_chave'
@@ -81,10 +81,10 @@ class ChaveQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateV
     ###################################################
     def form_valid(self, form):
         form.instance.tipo = 'SALA'
-        self.object = form.save()
-        codigo = form.cleaned_data['sala'].codigo + "CH" + str(self.object.pk)
-        self.object.codigo = codigo
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        self.object.codigo = form.cleaned_data['sala'].codigo + "CH" + str(self.object.pk)
+        self.object.save()
+        return response
 
 class ChaveSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
     permission_required = 'chaves.add_chave'
@@ -100,10 +100,10 @@ class ChaveSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin, 
     ###################################################
     def form_valid(self, form):
         form.instance.tipo = 'SALA'
-        self.object = form.save()
-        codigo = str(form.cleaned_data['sala'].pk) + "CH" + str(self.object.pk)
-        self.object.codigo = codigo
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        self.object.codigo = form.cleaned_data['sala'].codigo + "CH" + str(self.object.pk)
+        self.object.save()
+        return response
 
 class ChaveBlocoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
     permission_required = 'chaves.update_chave'

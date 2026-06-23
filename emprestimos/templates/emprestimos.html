@@ -94,14 +94,15 @@
                                 <td>{{ emprestimo.chave_bloco.nome|default:"---" }}</td>
                                 <td>{{ emprestimo.get_status_display }}</td>
                                 <td style="text-align: center">
-                                    {% if emprestimo.status == 'ATIVO' %}
+                                    {% if emprestimo.status == 'ATIVO' or emprestimo.status == 'ATRASADO' %}
                                     <a href="{% url 'emprestimo_devolver' emprestimo.pk %}" class="btn btn-sm btn-outline-success me-1" title="Finalizar/Devolver">
                                         <i class="fas fa-check-circle"></i>
                                     </a>
-                                    {% endif %}
+                                    {% else %}
                                     <a href="{% url 'emprestimo_apagar' emprestimo.pk %}" class="btn btn-sm btn-outline-danger me-1" title="Excluir">
                                         <i class="far fa-trash-alt"></i>
                                     </a>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}

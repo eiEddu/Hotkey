@@ -10,13 +10,13 @@ class ReservaQuartoForm(forms.ModelForm):
 
     class Meta:
         model = Reserva
-        fields = '__all__'
+        fields = ['cliente','sala','funcionario','data_inicio','data_fim']
         widgets = {
             'data_inicio': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'data_fim': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
         error_messages = {
-            'codigo': {'required': 'O código de reserva é obrigatório', 'unique': 'O código informado já existe'},
+            #'codigo': {'required': 'O código de reserva é obrigatório', 'unique': 'O código informado já existe'},
             'data_inicio': {'required': 'Data de início obrigatória'},
             'data_fim': {'required': 'Data fim obrigatória'}
         }
@@ -29,13 +29,13 @@ class ReservaSalaComercialForm(forms.ModelForm):
 
     class Meta:
         model = Reserva
-        fields = '__all__'
+        fields = ['cliente','sala','funcionario','data_inicio','data_fim']
         widgets = {
             'data_inicio': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'data_fim': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
         error_messages = {
-            'codigo': {'required': 'O código de reserva é obrigatório', 'unique': 'O código informado já existe'},
+          #  'codigo': {'required': 'O código de reserva é obrigatório', 'unique': 'O código informado já existe'},
             'data_inicio': {'required': 'Data de início obrigatória'},
             'data_fim': {'required': 'Data fim obrigatória'}
         }

@@ -7,16 +7,16 @@
         
         <form action="" method="GET">
             <div class="row p-3 mb-3 bg-white shadow-sm rounded align-items-end">
-                <div class="col-md-5 mb-2">
+                <div class="col-md-3 mb-2">
                     <label class="fw-bold text-dark small">Identificador do Bloco:</label>
                     <input class="form-control border-dark" type="text" name="codigo" value="{{ request.GET.codigo }}" placeholder="Ex: AN1BL1">
                 </div>
-                <div class="col-md-5 mb-2">
+                <div class="col-md-3 mb-2">
                     <label class="fw-bold text-dark small">Nome do Bloco:</label>
                     <input class="form-control border-dark" type="text" name="nome" value="{{ request.GET.nome }}" placeholder="Ex: Bloco 3A">
                 </div>
 
-                <div class="col-md-5 mb-2">
+                <div class="col-md-4 mb-2">
                     <label class="fw-bold text-dark small">Andar:</label>
                     <select class="form-select border-dark" name="andar">
                         <option value="">Todos os Andares</option>

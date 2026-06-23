@@ -59,6 +59,12 @@ class ReservaQuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin, Creat
     success_url = reverse_lazy('reservas')
     success_message = 'Reserva de Quarto criada com sucesso!'
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.object.codigo = f"RES{self.object.pk}"
+        self.object.save()
+        return response
+
 class ReservaSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
     permission_required = 'reservas.create_reserva'
     permission_denied = 'Cadastrar reserva de Sala Comercial'
@@ -67,6 +73,12 @@ class ReservaSalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin
     template_name = 'reserva_form.html'
     success_url = reverse_lazy('reservas')
     success_message = 'Reserva de Sala Comercial criada com sucesso!'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.object.codigo = f"RES{self.object.pk}"
+        self.object.save()
+        return response
 
 class ReservaQuartoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
     permission_required = 'reservas.update_reserva'
@@ -113,3 +125,5 @@ class ReservaCancelarView(PermissionRequiredMixin, View):
         reserva.save()
         messages.success(request,f"Reserva {reserva.codigo} cancelada com sucesso!")
         return redirect('reservas')
+
+

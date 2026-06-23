@@ -56,14 +56,13 @@ class QuartoCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
     success_message = 'Quarto criado com sucesso!'
 
     def form_valid(self, form):
-        form.instance.tipo = 'QUARTO' # Define o tipo
-        self.object = form.save()
-        if self.object.pk < 10:
-            codigo = "QU" + form.cleaned_data['andar'] + "0" + str(self.object.pk)
-        else:
-            codigo = "QU" + form.cleaned_data['andar'] + str(self.object.pk)
-        self.object.codigo = codigo
-        return super().form_valid(form)
+        form.instance.tipo = 'QUARTO'
+        response = super().form_valid(form)
+        andar = form.cleaned_data['andar']
+        pk_str = f"0{self.object.pk}" if self.object.pk < 10 else str(self.object.pk)
+        self.object.codigo = f"QU{andar}{pk_str}"
+        self.object.save()
+        return response
 
 class SalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
     permission_required = 'salas.create_sala'
@@ -75,14 +74,16 @@ class SalaComercialCreateView(PermissionRequiredMixin,SuccessMessageMixin, Creat
     success_message = 'Sala Comercial criada com sucesso!'
 
     def form_valid(self, form):
-        form.instance.tipo = 'SALA COMERCIAL' # Define o tipo
-        self.object = form.save()
-        if self.object.pk < 10:
-            codigo = "SA" + form.cleaned_data['andar'] + "0" + str(self.object.pk)
-        else:
-            codigo = "SA" + form.cleaned_data['andar'] + str(self.object.pk)
-        self.object.codigo = codigo
-        return super().form_valid(form)
+        form.instance.tipo = 'SALA COMERCIAL'
+        bloco_selecionado = form.cleaned_data['bloco']
+        form.instance.andar = bloco_selecionado.andar
+        response = super().form_valid(form)
+        andar = bloco_selecionado.andar
+        pk_str = f"0{self.object.pk}" if self.object.pk < 10 else str(self.object.pk)
+        self.object.codigo = f"SA{andar}{pk_str}"
+        self.object.save()
+
+        return response
 
 class QuartoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
     permission_required = 'salas.update_sala'
